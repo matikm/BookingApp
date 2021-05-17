@@ -1,0 +1,178 @@
+﻿@model BookingApp.ViewModels.ReservationListViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    string bg = " ";
+}
+
+
+
+<style>
+    a:link {
+        color: black;
+    }
+
+    a:visited {
+        color: black;
+    }
+
+    a:hover {
+        color: #333;
+        opacity: 0.7;
+        text-decoration: none;
+    }
+
+    a:active {
+        color: black;
+    }
+
+    .btn-delete {
+        position: absolute;
+        border-radius: 50%;
+        top: 0px;
+        right: -10px;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        width: 25px;
+        height: 25px;
+        text-align: center;
+        padding: 0;
+        -webkit-box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+        box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+        -webkit-transition: background .2s ease-in-out;
+        transition: background .2s ease-in-out;
+        border: 0px;
+        font-size: 11px;
+        color: black;
+        font-weight: 700;
+    }
+</style>
+
+<a data-toggle="modal" data-target="#AddReservationModal">
+    Create New
+</a>
+
+<!-- Modal -->
+<div class="modal fade" id="AddReservationModal" tabindex="-1" role="dialog" aria-labelledby="AddReservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddReservationModalLabel">Add reservation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-action="Create">
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label asp-for="CheckIn" class="control-label"></label>
+                                <input asp-for="CheckIn" class="form-control" required />
+                                <span asp-validation-for="CheckIn" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label asp-for="CheckOut" class="control-label"></label>
+                                <input asp-for="CheckOut" class="form-control" />
+                                <span  asp-validation-for="CheckOut" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label asp-for="ObjectForRentId" class="control-label"></label>
+                                <select asp-for="ObjectForRentId" asp-items="Model.ObjectForRents" class="form-control dropdown">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label asp-for="CustomerId" class="control-label"></label>
+                                <select asp-for="CustomerId" asp-items="Model.Customers" class="form-control dropdown">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="People" class="control-label"></label>
+                                <input asp-for="People" class="form-control" />
+                                <span asp-validation-for="People" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="ReservationDeposit" class="control-label"></label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" asp-for="ReservationDepositPayment" aria-label=" @Html.DisplayNameFor(model => model.ReservationDepositPayment)">
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" asp-for="ReservationDeposit" aria-label="@Html.DisplayNameFor(model => model.ReservationDeposit)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="ReservationPrice" class="control-label"></label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" asp-for="ReservationPricePayment" aria-label=" @Html.DisplayNameFor(model => model.ReservationPricePayment)">
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" asp-for="ReservationPrice" aria-label="@Html.DisplayNameFor(model => model.ReservationPrice)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+<div class="row">
+    @foreach (var item in Model.Reservations)
+    {
+        @if (item.ReservationDepositPayment == true && item.ReservationPricePayment == false) { bg = "bg-primary"; }
+        else if (item.ReservationPricePayment == true) { bg = "bg-success"; }
+        else { bg = ""; }
+
+        <div class="col-12 col-md-3 py-2">
+            <div class="card">
+                <h5 class="card-text text-center m-0 p-2 @bg">@item.CheckIn.ToString("dd.MM hh:mm") - @item.CheckOut.ToString("dd.MM hh:mm")</h5>
+                <div class="card-body rounded text-center">
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        <h2 class="card-title text-uppercase">@item.ObjectForRent.Name</h2>
+                        <p class="card-text">@item.Customer.FirstName @item.Customer.LastName</p>
+                        <p class="card-text mb-0">Zadatek: @item.ReservationDeposit </p>
+                        <p class="card-text mb-4">Całość: @item.ReservationPrice </p>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">
+                        <button class="btn-danger btn-delete">X</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

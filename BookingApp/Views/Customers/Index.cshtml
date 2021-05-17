@@ -1,0 +1,78 @@
+﻿@model BookingApp.ViewModels.CustomerViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Klienci</h1>
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col-12 col-sm-2 p-2">
+                <input asp-for="Customer.FirstName" class="form-control" placeholder="@Html.DisplayNameFor(n=> n.Customer.FirstName)" />
+                <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-sm-2 p-2">
+                <input asp-for="Customer.LastName" class="form-control" placeholder="@Html.DisplayNameFor(n=> n.Customer.LastName)" />
+                <span asp-validation-for="Customer.LastName" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-sm-3 p-2">
+                <input asp-for="Customer.Telephone" class="form-control" placeholder="@Html.DisplayNameFor(n=> n.Customer.Telephone)" />
+                <span asp-validation-for="Customer.Telephone" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-sm-3 p-2">
+                <input asp-for="Customer.Email" class="form-control" placeholder="@Html.DisplayNameFor(n=> n.Customer.Email)" />
+                <span asp-validation-for="Customer.Email" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-sm-2 p-2">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(n => n.Customer.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(n => n.Customer.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(n => n.Customer.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(n => n.Customer.Telephone)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Customers)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telephone)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
