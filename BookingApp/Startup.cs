@@ -10,6 +10,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BookingApp.Data;
+using BookingApp.Interfaces;
+using BookingApp.Repositories;
 
 namespace BookingApp
 {
@@ -25,6 +27,8 @@ namespace BookingApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+
             services.AddControllersWithViews();
 
             services.AddDbContext<BookingAppContext>(options =>
