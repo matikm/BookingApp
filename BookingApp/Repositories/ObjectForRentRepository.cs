@@ -52,7 +52,7 @@ namespace BookingApp.Repositories
 
         public async Task<bool> UpdateObjectForRent(ObjectForRent objectForRent)
         {
-            _context.Entry(await _context.ObjectForRent.FirstOrDefaultAsync(c => c.Id == objectForRent.Id)).CurrentValues.SetValues(objectForRent);
+            _context.Entry(_context.ObjectForRent.FirstOrDefault(c => c.Id == objectForRent.Id)).CurrentValues.SetValues(objectForRent);
 
             if (await _context.SaveChangesAsync() > 0)
                 return true;

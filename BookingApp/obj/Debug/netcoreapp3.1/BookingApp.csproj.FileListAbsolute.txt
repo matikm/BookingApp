@@ -175,9 +175,8 @@ C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\Bo
 C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\Customers\Delete.cshtml.g.cs
 C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\Customers\Edit.cshtml.g.cs
 C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\Customers\Index.cshtml.g.cs
-C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\ObjectForRents\Create.cshtml.g.cs
 C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\ObjectForRents\Delete.cshtml.g.cs
-C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\ObjectForRents\Details.cshtml.g.cs
 C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\ObjectForRents\Edit.cshtml.g.cs
 C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\ObjectForRents\Index.cshtml.g.cs
 C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\bin\Debug\netcoreapp3.1\libman.json
+C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\PriceList\index.cshtml.g.cs

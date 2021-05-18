@@ -20,5 +20,6 @@ namespace BookingApp.Data
         public DbSet<BookingApp.Models.Customer> Customer { get; set; }
 
         public DbSet<BookingApp.Models.ObjectForRent> ObjectForRent { get; set; }
+        public DbSet<BookingApp.Models.PricePerPeople> PricePerPeople { get; set; }
     }
 }

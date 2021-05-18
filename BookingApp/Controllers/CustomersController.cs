@@ -28,11 +28,6 @@ namespace BookingApp.Controllers
             return View(customerViewModel);
         }
 
-        // GET: Customers/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
 
         // POST: Customers/Create
         [HttpPost]

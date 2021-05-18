@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BookingApp.Repositories
 {
-    public class CustomerRepository : ICustomerRepository
+    public class CustomerRepository : ICustomerRepository 
     {
         private readonly BookingAppContext _context;
         public CustomerRepository(BookingAppContext context)
@@ -37,8 +37,8 @@ namespace BookingApp.Repositories
         }
 
         public async Task<bool> UpdateCustomer(Customer customer)
-        {
-            _context.Entry(await _context.Customer.FirstOrDefaultAsync(c => c.Id == customer.Id)).CurrentValues.SetValues(customer);
+        {         
+            _context.Entry(_context.Customer.FirstOrDefault(c => c.Id == customer.Id)).CurrentValues.SetValues(customer);
 
             if (await _context.SaveChangesAsync() > 0)
                 return true;

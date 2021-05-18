@@ -1,47 +1,72 @@
-﻿@model IEnumerable<BookingApp.Models.ObjectForRent>
+﻿@model BookingApp.ViewModels.ObjectForRentViewModel
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Object</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@using (Html.BeginForm("Create", "ObjectForRents", FormMethod.Post, new { role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <div class="form-row">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="col-12 col-sm-2 p-2">
+                @Html.TextBoxFor(m => m.ObjectForRent.Name, new { placeholder = "Name", @class = "form-control" ,  })
+                @Html.ValidationMessageFor(m => m.ObjectForRent.Name, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-12 col-sm-6 p-2">
+                @Html.TextBoxFor(m => m.ObjectForRent.Description, new { placeholder = "Description", @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ObjectForRent.Description, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-12 col-sm-2 p-2">
+                @Html.TextBoxFor(m => m.ObjectForRent.Photo, new { placeholder = "Photo", @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ObjectForRent.Photo, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-12 col-sm-2 p-2">
+                <input type="submit" value="Create" class="btn btn-primary" /> 
+            </div>
+        </div>
+    </div>
+}
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.ObjectForRent.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.ObjectForRent.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Photo)
+                @Html.DisplayNameFor(model => model.ObjectForRent.Photo)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Photo)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+
+        @foreach (var item in Model.ObjectForRents)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Photo)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-controller="PriceList" asp-route-id="@item.Id">Cennik</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

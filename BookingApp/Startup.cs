@@ -30,6 +30,7 @@ namespace BookingApp
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IReservationRepository, ReservationRepository>();
             services.AddScoped<IObjectForRentRepository, ObjectForRentRepository>();
+            services.AddScoped<IPricePerPeopleRepository, PricePerPeopleRepository>();
 
             services.AddControllersWithViews();
 

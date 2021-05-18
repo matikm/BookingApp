@@ -8,27 +8,36 @@ using Microsoft.EntityFrameworkCore;
 using BookingApp.Data;
 using BookingApp.Models;
 using BookingApp.Interfaces;
+using BookingApp.ViewModels;
 
 namespace BookingApp.Controllers
 {
     public class ObjectForRentsController : Controller
     {
         private readonly IObjectForRentRepository _objectForRentRepositorytory;
+        private readonly IPricePerPeopleRepository _pricePerPeopleRepository;
+        public ICollection<PricePerPeople> PricePerPeoples { get; set; }
+        public ObjectForRentViewModel ObjectForRentViewModel { get; set; }
 
-        public ObjectForRentsController(IObjectForRentRepository objectForRentRepositorytory)
+        public ObjectForRentsController(IObjectForRentRepository objectForRentRepositorytory, IPricePerPeopleRepository pricePerPeopleRepository)
         {
             _objectForRentRepositorytory = objectForRentRepositorytory;
+            _pricePerPeopleRepository = pricePerPeopleRepository;           
         }
 
         // GET: ObjectForRents
         public async Task<IActionResult> Index()
         {
-            return View(await _objectForRentRepositorytory.GetObjectForRents());
+            ObjectForRentViewModel = new ObjectForRentViewModel(){
+                ObjectForRents = await _objectForRentRepositorytory.GetObjectForRents()
+            };
+
+            return View(ObjectForRentViewModel);
         }
 
         // GET: ObjectForRents/Details/5
         public async Task<IActionResult> Details(int? id)
-        {
+        {         
             var objectForRent = await _objectForRentRepositorytory.GetObjectForRent(id);
 
             if (objectForRent == null)
@@ -37,23 +46,17 @@ namespace BookingApp.Controllers
             return View(objectForRent);
         }
 
-        // GET: ObjectForRents/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         // POST: ObjectForRents/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Photo")] ObjectForRent objectForRent)
+        public async Task<IActionResult> Create(ObjectForRentViewModel CreateObjectForRentViewModel)
         {
             if (ModelState.IsValid)
             {
-                await _objectForRentRepositorytory.AddObjectForRent(objectForRent);
+                await _objectForRentRepositorytory.AddObjectForRent(CreateObjectForRentViewModel.ObjectForRent);
                 return RedirectToAction(nameof(Index));
             }
-            return View(objectForRent);
+            return View(CreateObjectForRentViewModel.ObjectForRent);
         }
 
         // GET: ObjectForRents/Edit/5
@@ -74,16 +77,13 @@ namespace BookingApp.Controllers
         {
             if (id != objectForRent.Id)
                 return NotFound();
-            
-
-            if (ModelState.IsValid)
+            else
             {
-                if (await _objectForRentRepositorytory.UpdateObjectForRent(objectForRent)) 
+                if (await _objectForRentRepositorytory.UpdateObjectForRent(objectForRent))
                     return RedirectToAction(nameof(Index));
-                else 
+                else
                     return NotFound();
             }
-            return View(objectForRent);
         }
 
         // GET: ObjectForRents/Delete/5

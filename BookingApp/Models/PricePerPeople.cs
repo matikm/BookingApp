@@ -15,5 +15,6 @@ namespace BookingApp.Models
         public int People { get; set; }
         [Display(Name = "Cena")]
         public decimal Price { get; set; }
+
     }
 }
