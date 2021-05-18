@@ -7,38 +7,32 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookingApp.Data;
 using BookingApp.Models;
+using BookingApp.Interfaces;
 
 namespace BookingApp.Controllers
 {
     public class ObjectForRentsController : Controller
     {
-        private readonly BookingAppContext _context;
+        private readonly IObjectForRentRepository _objectForRentRepositorytory;
 
-        public ObjectForRentsController(BookingAppContext context)
+        public ObjectForRentsController(IObjectForRentRepository objectForRentRepositorytory)
         {
-            _context = context;
+            _objectForRentRepositorytory = objectForRentRepositorytory;
         }
 
         // GET: ObjectForRents
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ObjectForRent.ToListAsync());
+            return View(await _objectForRentRepositorytory.GetObjectForRents());
         }
 
         // GET: ObjectForRents/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var objectForRent = await _objectForRentRepositorytory.GetObjectForRent(id);
 
-            var objectForRent = await _context.ObjectForRent
-                .FirstOrDefaultAsync(m => m.Id == id);
             if (objectForRent == null)
-            {
                 return NotFound();
-            }
 
             return View(objectForRent);
         }
@@ -56,8 +50,7 @@ namespace BookingApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(objectForRent);
-                await _context.SaveChangesAsync();
+                await _objectForRentRepositorytory.AddObjectForRent(objectForRent);
                 return RedirectToAction(nameof(Index));
             }
             return View(objectForRent);
@@ -66,16 +59,11 @@ namespace BookingApp.Controllers
         // GET: ObjectForRents/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var objectForRent = await _objectForRentRepositorytory.GetObjectForRent(id);
 
-            var objectForRent = await _context.ObjectForRent.FindAsync(id);
             if (objectForRent == null)
-            {
                 return NotFound();
-            }
+
             return View(objectForRent);
         }
 
@@ -85,29 +73,15 @@ namespace BookingApp.Controllers
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Photo")] ObjectForRent objectForRent)
         {
             if (id != objectForRent.Id)
-            {
                 return NotFound();
-            }
+            
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(objectForRent);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ObjectForRentExists(objectForRent.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                if (await _objectForRentRepositorytory.UpdateObjectForRent(objectForRent)) 
+                    return RedirectToAction(nameof(Index));
+                else 
+                    return NotFound();
             }
             return View(objectForRent);
         }
@@ -115,19 +89,11 @@ namespace BookingApp.Controllers
         // GET: ObjectForRents/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
+            var objectForRent = await _objectForRentRepositorytory.GetObjectForRent(id);
+            if (objectForRent != null)
+                return View(objectForRent);
+            else
                 return NotFound();
-            }
-
-            var objectForRent = await _context.ObjectForRent
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (objectForRent == null)
-            {
-                return NotFound();
-            }
-
-            return View(objectForRent);
         }
 
         // POST: ObjectForRents/Delete/5
@@ -135,15 +101,9 @@ namespace BookingApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var objectForRent = await _context.ObjectForRent.FindAsync(id);
-            _context.ObjectForRent.Remove(objectForRent);
-            await _context.SaveChangesAsync();
+            var objectForRent = await _objectForRentRepositorytory.DeleteObjectForRent(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ObjectForRentExists(int id)
-        {
-            return _context.ObjectForRent.Any(e => e.Id == id);
-        }
     }
 }

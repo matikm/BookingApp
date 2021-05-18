@@ -64,13 +64,12 @@ namespace BookingApp.Controllers
         public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Telephone")] Customer customer)
         {
             if (id != customer.Id)
-            {
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
-                if (await _customerRepository.UpdateCustomer(customer)) return RedirectToAction(nameof(Index));
+                if (await _customerRepository.UpdateCustomer(customer)) 
+                    return RedirectToAction(nameof(Index));
                 else return NotFound();
             }
             return View(customer);

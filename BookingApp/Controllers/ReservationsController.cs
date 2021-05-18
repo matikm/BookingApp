@@ -8,27 +8,39 @@ using Microsoft.EntityFrameworkCore;
 using BookingApp.Data;
 using BookingApp.Models;
 using BookingApp.ViewModels;
+using BookingApp.Interfaces;
 
 namespace BookingApp.Controllers
 {
     public class ReservationsController : Controller
     {
-        private readonly BookingAppContext _context;
-        private ICollection<ObjectForRent> _objectForRents;
-        private ICollection<Customer> _customers;
+        private readonly IReservationRepository _reservationRepository;
+        private readonly IObjectForRentRepository _objectForRentRepositorytory;
+        private readonly ICustomerRepository _customerRepository;
 
-        public ReservationsController(BookingAppContext context)
+        private ICollection<ObjectForRent> _objectForRents { get; set; }
+        private ICollection<Customer> _customers { get; set; }
+        public ReservationListViewModel reservationListViewModel { get; set; }
+
+        public ReservationsController(IReservationRepository reservationRepository, ICustomerRepository customerRepository, IObjectForRentRepository objectForRentRepositorytory, BookingAppContext context)
         {
-            _context = context;
-            _objectForRents = _context.ObjectForRent.ToList();
-            _customers = _context.Customer.ToList();
+            _reservationRepository = reservationRepository;
+            _objectForRentRepositorytory = objectForRentRepositorytory;
+            _customerRepository = customerRepository;
+            GetObjectAndCustomersAsync();
+            reservationListViewModel =  new ReservationListViewModel();
+        }
+
+        void GetObjectAndCustomersAsync()
+        {
+            _objectForRents = _objectForRentRepositorytory.GetObjectForRents().Result;
+            _customers = _customerRepository.GetCustomers().Result;
         }
 
         // GET: Reservations
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            ReservationListViewModel reservationListViewModel = new ReservationListViewModel();
-            reservationListViewModel.Reservations = _context.Reservation.ToList();
+            reservationListViewModel.Reservations = await _reservationRepository.GetReservations();
             reservationListViewModel.ObjectForRents = new SelectList(_objectForRents, "Id", "Name");
             reservationListViewModel.Customers = _customers.Select(a =>
                                               new SelectListItem
@@ -43,26 +55,12 @@ namespace BookingApp.Controllers
         // GET: Reservations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var reservation = await _reservationRepository.GetReservation(id);
 
-            var reservation = await _context.Reservation
-                .FirstOrDefaultAsync(m => m.Id == id);
             if (reservation == null)
-            {
                 return NotFound();
-            }
 
             return View(reservation);
-        }
-
-        // GET: Reservations/Create
-        public IActionResult Create()
-        {
-
-            return View();
         }
 
         // POST: Reservations/Create
@@ -76,8 +74,7 @@ namespace BookingApp.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(reservation);
-                await _context.SaveChangesAsync();
+                await _reservationRepository.AddReservation(reservation);
                 return RedirectToAction(nameof(Index));
             }
             return RedirectToAction(nameof(Index));
@@ -86,12 +83,7 @@ namespace BookingApp.Controllers
         // GET: Reservations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var reservation = await _context.Reservation.FindAsync(id);
+            var reservation = await _reservationRepository.GetReservation(id);
             if (reservation == null)
             {
                 return NotFound();
@@ -105,29 +97,14 @@ namespace BookingApp.Controllers
         public async Task<IActionResult> Edit(int id, [Bind("Id,CheckIn,CheckOut,People,ReservationDepositPayment,ReservationPricePayment,ReservationDeposit,ReservationPrice")] Reservation reservation)
         {
             if (id != reservation.Id)
-            {
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(reservation);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReservationExists(reservation.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                if (await _reservationRepository.UpdateReservation(reservation))
+                    return RedirectToAction(nameof(Index));
+                else 
+                    return NotFound();
             }
             return View(reservation);
         }
@@ -135,19 +112,12 @@ namespace BookingApp.Controllers
         // GET: Reservations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var reservation = await _reservationRepository.GetReservation(id);
 
-            var reservation = await _context.Reservation
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (reservation == null)
-            {
+            if (reservation != null)
+                return View(reservation);
+            else
                 return NotFound();
-            }
-
-            return View(reservation);
         }
 
         // POST: Reservations/Delete/5
@@ -155,15 +125,8 @@ namespace BookingApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var reservation = await _context.Reservation.FindAsync(id);
-            _context.Reservation.Remove(reservation);
-            await _context.SaveChangesAsync();
+            var reservation = await _reservationRepository.DeleteReservation(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ReservationExists(int id)
-        {
-            return _context.Reservation.Any(e => e.Id == id);
         }
     }
 }
