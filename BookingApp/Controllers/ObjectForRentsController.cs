@@ -15,14 +15,12 @@ namespace BookingApp.Controllers
     public class ObjectForRentsController : Controller
     {
         private readonly IObjectForRentRepository _objectForRentRepositorytory;
-        private readonly IPricePerPeopleRepository _pricePerPeopleRepository;
         public ICollection<PricePerPeople> PricePerPeoples { get; set; }
         public ObjectForRentViewModel ObjectForRentViewModel { get; set; }
 
         public ObjectForRentsController(IObjectForRentRepository objectForRentRepositorytory, IPricePerPeopleRepository pricePerPeopleRepository)
         {
-            _objectForRentRepositorytory = objectForRentRepositorytory;
-            _pricePerPeopleRepository = pricePerPeopleRepository;           
+            _objectForRentRepositorytory = objectForRentRepositorytory;          
         }
 
         // GET: ObjectForRents

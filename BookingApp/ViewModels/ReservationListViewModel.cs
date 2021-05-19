@@ -8,16 +8,18 @@ using System.Threading.Tasks;
 
 namespace BookingApp.ViewModels
 {
-    public class ReservationListViewModel : Reservation
+    public class ReservationListViewModel
     {
         public ICollection<Reservation> Reservations { get; set; }
         public SelectList ObjectForRents { get; set; }
         public IEnumerable<SelectListItem> Customers { get; set; }
-
+        public Reservation Reservation { get; set; }
         [Display(Name = "Klient")]
         public int CustomerId { get; set; }
         [Display(Name = "Objekt")]
         public int ObjectForRentId { get; set; }
 
+        public DateTime FromDate { get; set; }
+        public DateTime UntilDate { get; set; }
     }
 }

@@ -68,7 +68,7 @@ namespace BookingApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ReservationListViewModel reservationListViewModel)
         {
-            Reservation reservation = reservationListViewModel;
+            Reservation reservation = reservationListViewModel.Reservation;
             reservation.ObjectForRent = _objectForRents.FirstOrDefault(x => x.Id == reservationListViewModel.ObjectForRentId);
             reservation.Customer = _customers.FirstOrDefault(x => x.Id == reservationListViewModel.CustomerId);
 

@@ -16,10 +16,15 @@ namespace BookingApp.Data
         }
 
         public DbSet<BookingApp.Models.Reservation> Reservation { get; set; }
-
         public DbSet<BookingApp.Models.Customer> Customer { get; set; }
-
         public DbSet<BookingApp.Models.ObjectForRent> ObjectForRent { get; set; }
         public DbSet<BookingApp.Models.PricePerPeople> PricePerPeople { get; set; }
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<ObjectForRent>()
+        //        .WithMany(a => a.)
+        //        .OnDelete(DeleteBehavior.Delete);
+        //}
     }
 }
