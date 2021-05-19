@@ -4,7 +4,7 @@
     ViewData["Title"] = "index";
 }
 
-<h1>Cennik</h1>
+<h1 class="text-white">Cennik</h1>
 
 
 @using (Html.BeginForm("Create", "PriceList", FormMethod.Post, new { role = "form" }))
@@ -24,19 +24,15 @@
                 @Html.ValidationMessageFor(m => m.PricePerPeople.Price, "", new { @class = "text-danger" })
             </div>
             <div class="col-12 col-sm-4 p-2">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary w-100" />
             </div>
         </div>
     </div>
 }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
 <table class="table">
     <thead>
-        <tr>
+        <tr class="table-light">
             <th>
                 @Html.DisplayNameFor(model => model.PricePerPeople.People)
             </th>
@@ -49,7 +45,7 @@
     <tbody>
         @foreach (var item in Model.PriceList)
         {
-            <tr>
+            <tr class="table-light">
                 <td>
                     @Html.DisplayFor(modelItem => item.People)
                 </td>

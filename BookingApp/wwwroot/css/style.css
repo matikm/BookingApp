@@ -37,6 +37,15 @@ a:active {
     font-weight: 700;
 }
 
+.header-icon{
+    font-size: 50px !important;
+    color: white;
+}
+
+.jumbotron {
+    padding: 2rem 1rem;
+}
+
 /*--- Loader ---*/
 
 .lds-ring {
@@ -79,4 +88,8 @@ a:active {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.btn-material{
+    font-size: 14px !important;
 }
