@@ -5,88 +5,51 @@
     string bg = " ";
 }
 
-
-
-<style>
-    a:link {
-        color: black;
-    }
-
-    a:visited {
-        color: black;
-    }
-
-    a:hover {
-        color: #333;
-        opacity: 0.7;
-        text-decoration: none;
-    }
-
-    a:active {
-        color: black;
-    }
-
-    .btn-delete {
-        position: absolute;
-        border-radius: 50%;
-        top: 0px;
-        right: -10px;
-        -webkit-transform: translateY(-50%);
-        transform: translateY(-50%);
-        width: 25px;
-        height: 25px;
-        text-align: center;
-        padding: 0;
-        -webkit-box-shadow: 0 0 10px rgb(0 0 0 / 10%);
-        box-shadow: 0 0 10px rgb(0 0 0 / 10%);
-        -webkit-transition: background .2s ease-in-out;
-        transition: background .2s ease-in-out;
-        border: 0px;
-        font-size: 11px;
-        color: black;
-        font-weight: 700;
-    }
-</style>
-
 <a data-toggle="modal" data-target="#AddReservationModal">
     Create New
 </a>
 
-<div class="row">
-    <div class="col-12 col-sm-4">
-        <div class="col-12 col-sm-2 p-2">
-            @Html.TextBoxFor(m => m.ObjectForRent.Name, new { placeholder = "Name", @class = "form-control", })
-            @Html.ValidationMessageFor(m => m.ObjectForRent.Name, "", new { @class = "text-danger" })
-        </div>
-    </div>
-</div>
+<form asp-action="GetForDate"
+      data-ajax="true"
+      data-ajax-method="POST"
+      data-ajax-mode="replace"
+      data-ajax-update="#reservationsList"
+      data-ajax-loading="#loading">
 
-<div class="row">
-    @foreach (var item in Model.Reservations)
-    {
-        @if (item.ReservationDepositPayment == true && item.ReservationPricePayment == false) { bg = "bg-primary"; }
-        else if (item.ReservationPricePayment == true) { bg = "bg-success"; }
-        else { bg = ""; }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <div class="col-12 col-md-3 py-2">
-            <div class="card">
-                <h5 class="card-text text-center m-0 p-2 @bg">@item.CheckIn.ToString("dd.MM hh:mm") - @item.CheckOut.ToString("dd.MM hh:mm")</h5>
-                <div class="card-body rounded text-center">
-                    <a asp-action="Details" asp-route-id="@item.Id">
-                        <h2 class="card-title text-uppercase">@item.ObjectForRent.Name</h2>
-                        <p class="card-text">@item.Customer.FirstName @item.Customer.LastName</p>
-                        <p class="card-text mb-0">Zadatek: @item.ReservationDeposit </p>
-                        <p class="card-text mb-4">Całość: @item.ReservationPrice </p>
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@item.Id">
-                        <button class="btn-danger btn-delete">X</button>
-                    </a>
+    <div class="form-row align-items-center">
+        <div class="col-12 col-sm-4 my-1">
+            <label class="sr-only" for="fromDate">Od</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">Od</div>
                 </div>
+                <input name="fromDate" type="date" class="form-control" value="@Model.fromDate.ToString("yyyy-MM-dd")"/>
+                <span asp-validation-for="fromDate" class="text-danger"></span>
             </div>
         </div>
-    }
-</div>
+        <div class="col-12 col-sm-4 my-1">
+            <label class="sr-only" for="untilDate">Do</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">Od</div>
+                </div>
+                <input name="untilDate" type="date" class="form-control" value="@Model.untilDate.ToString("yyyy-MM-dd")"/>
+                <span asp-validation-for="untilDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-sm-auto my-1">
+            <button type="submit" class="btn btn-primary">Go</button>
+        </div>
+    </div>
+</form>
 
+<div id="loading" style="display:none;" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+
+<div id="reservationsList">
+    @await Html.PartialAsync("ReservationsList", (Model.Reservations) as IEnumerable<Reservation>)
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="AddReservationModal" tabindex="-1" role="dialog" aria-labelledby="AddReservationModalLabel" aria-hidden="true">
@@ -183,5 +146,6 @@
 </div>
 
 @section Scripts {
+    <script src="~/lib/jquery/dist/jquery.unobtrusive-ajax.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

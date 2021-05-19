@@ -1,0 +1,35 @@
+﻿@model IEnumerable<BookingApp.Models.Reservation>
+@{
+    string bg = " ";
+    DateTime toDay = DateTime.Now;
+}
+<div class="row">
+    @foreach (var item in Model)
+    {
+        @if (@item.CheckOut < toDay) { bg = "bg-secondary"; }
+        else
+        {
+            if (item.ReservationDepositPayment == true && item.ReservationPricePayment == false) { bg = "bg-primary"; }
+            else if (item.ReservationPricePayment == true) { bg = "bg-success"; }
+            else { bg = "bg-light"; }
+        }
+        
+
+        <div class="col-12 col-md-3 py-2">
+            <div class="card">
+                <h5 class="card-text text-center m-0 p-2 @bg">@item.CheckIn.ToString("dd.MM hh:mm") - @item.CheckOut.ToString("dd.MM hh:mm")</h5>
+                <div class="card-body rounded text-center">
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        <h2 class="card-title text-uppercase">@item.ObjectForRent.Name</h2>
+                        <p class="card-text">@item.Customer.FirstName @item.Customer.LastName</p>
+                        <p class="card-text mb-0">Zadatek: @item.ReservationDeposit </p>
+                        <p class="card-text mb-4">Całość: @item.ReservationPrice </p>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">
+                        <button class="btn-danger btn-delete">X</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

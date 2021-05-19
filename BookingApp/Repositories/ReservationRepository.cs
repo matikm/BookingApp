@@ -48,7 +48,16 @@ namespace BookingApp.Repositories
 
         public async Task<ICollection<Reservation>> GetReservations()
         {
-            return await _context.Reservation.ToListAsync();
+            return await _context.Reservation.OrderBy(d => d.CheckIn).ToListAsync();
+        }
+
+        public async Task<ICollection<Reservation>> GetReservations(DateTime fromDate)
+        {
+            return await _context.Reservation.Where(d => d.CheckOut >= fromDate).OrderBy(d => d.CheckIn).ToListAsync();
+        }
+        public async Task<ICollection<Reservation>> GetReservations(DateTime fromDate, DateTime untilDate)
+        {
+            return await _context.Reservation.Where(d => d.CheckOut >= fromDate && d.CheckIn <= untilDate).OrderBy(d => d.CheckIn).ToListAsync();
         }
 
         public async Task<bool> UpdateReservation(Reservation reservation)

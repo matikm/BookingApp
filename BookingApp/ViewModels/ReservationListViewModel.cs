@@ -19,7 +19,7 @@ namespace BookingApp.ViewModels
         [Display(Name = "Objekt")]
         public int ObjectForRentId { get; set; }
 
-        public DateTime FromDate { get; set; }
-        public DateTime UntilDate { get; set; }
+        public DateTime fromDate { get; set; }
+        public DateTime untilDate { get; set; }
     }
 }
