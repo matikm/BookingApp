@@ -40,7 +40,9 @@ namespace BookingApp.Controllers
         // GET: Reservations
         public async Task<IActionResult> Index()
         {
-            reservationListViewModel.Reservations = await _reservationRepository.GetReservations();
+            reservationListViewModel.fromDate = DateTime.Now;
+            reservationListViewModel.untilDate = DateTime.Now.AddMonths(1);
+            reservationListViewModel.Reservations = await _reservationRepository.GetReservations(reservationListViewModel.fromDate, reservationListViewModel.untilDate);
             reservationListViewModel.ObjectForRents = new SelectList(_objectForRents, "Id", "Name");
             reservationListViewModel.Customers = _customers.Select(a =>
                                               new SelectListItem
@@ -127,6 +129,14 @@ namespace BookingApp.Controllers
         {
             var reservation = await _reservationRepository.DeleteReservation(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        // POST: Reservations/GetForDate
+        [HttpPost]
+        public async Task<IActionResult> GetForDate(DateTime fromDate, DateTime untilDate)
+        {
+            reservationListViewModel.Reservations = await _reservationRepository.GetReservations(fromDate, untilDate);
+            return PartialView("ReservationsList", reservationListViewModel.Reservations);
         }
     }
 }

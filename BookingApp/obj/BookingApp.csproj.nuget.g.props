@@ -20,6 +20,7 @@
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">C:\Users\matik\.nuget\packages\microsoft.codeanalysis.analyzers\2.9.4</PkgMicrosoft_CodeAnalysis_Analyzers>
+    <PkgjQuery Condition=" '$(PkgjQuery)' == '' ">C:\Users\matik\.nuget\packages\jquery\1.8.0</PkgjQuery>
     <PkgMicrosoft_EntityFrameworkCore_Tools Condition=" '$(PkgMicrosoft_EntityFrameworkCore_Tools)' == '' ">C:\Users\matik\.nuget\packages\microsoft.entityframeworkcore.tools\3.1.15</PkgMicrosoft_EntityFrameworkCore_Tools>
     <PkgFontAwesome Condition=" '$(PkgFontAwesome)' == '' ">C:\Users\matik\.nuget\packages\fontawesome\4.7.0</PkgFontAwesome>
   </PropertyGroup>

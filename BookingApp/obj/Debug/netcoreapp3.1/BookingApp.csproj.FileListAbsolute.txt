@@ -180,3 +180,4 @@ C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\Bo
 C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\ObjectForRents\Index.cshtml.g.cs
 C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\bin\Debug\netcoreapp3.1\libman.json
 C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\PriceList\index.cshtml.g.cs
+C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\Reservations\ReservationsList.cshtml.g.cs

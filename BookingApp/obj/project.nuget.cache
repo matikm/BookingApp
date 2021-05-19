@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "jAFSigYpEj6Ozmjo9J8GZvpZ4ZFjV+Ww/QYBZ+hkc6F8YYuiiIde7FlFBgv6aDBaRKn9zZq5DWAPyrnp/eT3sQ==",
+  "dgSpecHash": "STvvEshunmqMlZzOem8q88tMyN2iCzgz/AV7Cz5l6bXl8i26GtGIFrhxk2puuSED/3wWLOM5FpK+t0MMTmLytQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\matik\\Desktop\\Semestr 6\\PdIwtA - Programowanie dla Internetu\\Projekt\\BookingApp\\BookingApp\\BookingApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\matik\\.nuget\\packages\\fontawesome\\4.7.0\\fontawesome.4.7.0.nupkg.sha512",
+    "C:\\Users\\matik\\.nuget\\packages\\jquery\\1.8.0\\jquery.1.8.0.nupkg.sha512",
     "C:\\Users\\matik\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\matik\\.nuget\\packages\\microsoft.aspnetcore.razor\\2.2.0\\microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",
     "C:\\Users\\matik\\.nuget\\packages\\microsoft.aspnetcore.razor.language\\3.1.0\\microsoft.aspnetcore.razor.language.3.1.0.nupkg.sha512",
@@ -48,6 +49,7 @@
     "C:\\Users\\matik\\.nuget\\packages\\microsoft.identitymodel.protocols\\5.5.0\\microsoft.identitymodel.protocols.5.5.0.nupkg.sha512",
     "C:\\Users\\matik\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\5.5.0\\microsoft.identitymodel.protocols.openidconnect.5.5.0.nupkg.sha512",
     "C:\\Users\\matik\\.nuget\\packages\\microsoft.identitymodel.tokens\\5.5.0\\microsoft.identitymodel.tokens.5.5.0.nupkg.sha512",
+    "C:\\Users\\matik\\.nuget\\packages\\microsoft.jquery.unobtrusive.ajax\\3.2.6\\microsoft.jquery.unobtrusive.ajax.3.2.6.nupkg.sha512",
     "C:\\Users\\matik\\.nuget\\packages\\microsoft.netcore.platforms\\2.1.2\\microsoft.netcore.platforms.2.1.2.nupkg.sha512",
     "C:\\Users\\matik\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\matik\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration\\3.1.5\\microsoft.visualstudio.web.codegeneration.3.1.5.nupkg.sha512",
