@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Klienci</h1>
+<h1 class="text-white">Klienci</h1>
 
 <form asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -28,15 +28,15 @@
                 <span asp-validation-for="Customer.Email" class="text-danger"></span>
             </div>
             <div class="col-12 col-sm-2 p-2">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary w-100" />
             </div>
         </div>
     </div>
 </form>
 
-<table class="table">
+<table class="table table-hover rounded">
     <thead>
-        <tr>
+        <tr class="table-light">
             <th>
                 @Html.DisplayNameFor(n => n.Customer.FirstName)
             </th>
@@ -55,7 +55,7 @@
     <tbody>
         @foreach (var item in Model.Customers)
         {
-            <tr>
+            <tr class="table-light">
                 <td>
                     @Html.DisplayFor(modelItem => item.FirstName)
                 </td>

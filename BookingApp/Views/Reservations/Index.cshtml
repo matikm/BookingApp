@@ -2,30 +2,33 @@
 
 @{
     ViewData["Title"] = "Index";
-    string bg = " ";
 }
 
-<a data-toggle="modal" data-target="#AddReservationModal">
-    Create New
-</a>
+
+<div class="jumbotron text-center bg-secondary ">
+    <span class="header-icon material-icons">
+        calendar_today
+    </span>
+    <h1 class="text-white">Rezerwacje</h1>
+</div>
+
 
 <form asp-action="GetForDate"
       data-ajax="true"
       data-ajax-method="POST"
       data-ajax-mode="replace"
-      data-ajax-update="#reservationsList"
-      data-ajax-loading="#loading">
+      data-ajax-update="#reservationsList">
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div class="form-row align-items-center">
+    <div class="form-row align-items-center mb-4">
         <div class="col-12 col-sm-4 my-1">
             <label class="sr-only" for="fromDate">Od</label>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <div class="input-group-text">Od</div>
                 </div>
-                <input name="fromDate" type="date" class="form-control" value="@Model.fromDate.ToString("yyyy-MM-dd")"/>
+                <input name="fromDate" type="date" class="form-control border-0 rounded-right" value="@Model.fromDate.ToString("yyyy-MM-dd")" />
                 <span asp-validation-for="fromDate" class="text-danger"></span>
             </div>
         </div>
@@ -35,17 +38,44 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text">Od</div>
                 </div>
-                <input name="untilDate" type="date" class="form-control" value="@Model.untilDate.ToString("yyyy-MM-dd")"/>
+                <input name="untilDate" type="date" class="form-control border-0 rounded-right" value="@Model.untilDate.ToString("yyyy-MM-dd")" />
                 <span asp-validation-for="untilDate" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-12 col-sm-auto my-1">
-            <button type="submit" class="btn btn-primary">Go</button>
+        <div class="col-6 col-sm-2 my-1">
+            <button type="submit" class="btn btn-primary w-100">
+                <span id="go" class="btn-material material-icons">
+                    search
+                </span>
+            </button>
+        </div>
+        <div class="col-6 col-sm-2 my-1">
+            <button class="btn btn-primary w-100" data-toggle="modal" data-target="#AddReservationModal">
+                <span class="btn-material material-icons">
+                    add
+                </span>
+            </button>
         </div>
     </div>
 </form>
-
-<div id="loading" style="display:none;" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+ 
+<script>
+    $.ajax({
+        beforeSend: function () {
+            // Show image container
+            $('#loading').show();
+            $('#go').hide();
+        },
+        success: function (response) {
+            
+        },
+        complete: function (data) {
+            // Hide image container
+            $('#loading').hide();
+            $('#go').show();
+        }
+    });
+</script>
 
 <div id="reservationsList">
     @await Html.PartialAsync("ReservationsList", (Model.Reservations) as IEnumerable<Reservation>)

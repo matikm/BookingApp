@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Object</h1>
+<h1 class="text-white">Object</h1>
 
 @using (Html.BeginForm("Create", "ObjectForRents", FormMethod.Post, new { role = "form" }))
 {
@@ -34,7 +34,7 @@
 
 <table class="table">
     <thead>
-        <tr>
+        <tr class="table-light">
             <th>
                 @Html.DisplayNameFor(model => model.ObjectForRent.Name)
             </th>
@@ -51,7 +51,7 @@
 
         @foreach (var item in Model.ObjectForRents)
         {
-            <tr>
+            <tr class="table-light">
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
