@@ -9,7 +9,7 @@ namespace BookingApp.ViewModels
 {
     public class DetailsReservationViewModel
     {
-        public SelectList ObjectForRents { get; set; }
+        public IEnumerable<ObjectForRent> ObjectForRents { get; set; }
         public IEnumerable<SelectListItem> Customers { get; set; }
         public Reservation Reservation { get; set; }
         public int CustomerId { get; set; }

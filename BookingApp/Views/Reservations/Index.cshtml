@@ -3,7 +3,6 @@
 
 @{
     ViewData["Title"] = "Index";
-    Reservation reservation;
 }
 
 
@@ -62,7 +61,7 @@
 </form>
 
 <div id="view-all">
-    @await Html.PartialAsync("ReservationsList",new ReservationListViewModel(Model.Reservations, Model.fromDate, Model.untilDate) { })
+    @await Html.PartialAsync("ReservationsList",new ReservationViewModel(Model.Reservations, Model.fromDate, Model.untilDate) { })
 </div>
 
 

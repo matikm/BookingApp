@@ -5,6 +5,7 @@
 
     String tCheckIn;
     String tCheckOut;
+    int objectSelected;
 
     if (Model.Reservation.Id != 0)
     {
@@ -15,6 +16,15 @@
     {
         tCheckOut = DateTime.Now.ToString("yyyy-MM-ddT11:00:00.000");
         tCheckIn = DateTime.Now.ToString("yyyy-MM-ddT15:00:00.000");
+    }
+
+    if (Model.Reservation.ObjectForRent != null)
+    {
+        objectSelected = Model.Reservation.ObjectForRent.Id;
+    }
+    else
+    {
+        objectSelected = 0;
     }
 }
 
@@ -44,8 +54,7 @@
         <div class="col-12 col-sm-6">
             <div class="form-group">
                 <label asp-for="@Model.ObjectForRentId" class="control-label"></label>
-                <select asp-for="@Model.ObjectForRentId" asp-items="@Model.ObjectForRents" class="form-control dropdown">
-                </select>
+                @Html.DropDownList("ObjectForRentId", new SelectList(@Model.ObjectForRents, "Id", "Name", objectSelected),null, new { @class = "form-control dropdown" })
             </div>
         </div>
         <div class="col-12 col-sm-6">
@@ -92,8 +101,7 @@
             </div>
         </div>
     </div>
-    <div class="form-group">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <input type="submit" value="Create" class="btn btn-primary" />
+    <div class="form-group pt-4">
+        <input type="submit" value="Submit" class="btn btn-primary w-100" />
     </div>
 </form>
