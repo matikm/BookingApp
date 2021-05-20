@@ -1,4 +1,5 @@
-﻿@model BookingApp.ViewModels.ReservationListViewModel
+﻿@model BookingApp.ViewModels.ReservationViewModel
+@using BookingApp.ViewModels 
 
 @{
     ViewData["Title"] = "Index";
@@ -17,7 +18,7 @@
       data-ajax="true"
       data-ajax-method="POST"
       data-ajax-mode="replace"
-      data-ajax-update="#reservationsList">
+      data-ajax-update="#view-all">
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -43,139 +44,50 @@
             </div>
         </div>
         <div class="col-6 col-sm-2 my-1">
-            <button type="submit" class="btn btn-primary w-100">
+            <button type="submit" class="btn btn-primary w-100" onclick="drawChart();">
                 <span id="go" class="btn-material material-icons">
                     search
                 </span>
             </button>
         </div>
         <div class="col-6 col-sm-2 my-1">
-            <button class="btn btn-primary w-100" data-toggle="modal" data-target="#AddReservationModal">
-                <span class="btn-material material-icons">
+            <a onclick="showInPopup('@Url.Action("AddOrEdit","Reservations",new {Id = 0, untilDate = Model.untilDate, fromDate = Model.fromDate },Context.Request.Scheme)','New Reservation')" class="btn btn-primary w-100">
+                <span class="btn-material material-icons text-white">
                     add
                 </span>
-            </button>
+            </a>
         </div>
     </div>
 </form>
- 
-<script>
-    $.ajax({
-        beforeSend: function () {
-            // Show image container
-            $('#loading').show();
-            $('#go').hide();
-        },
-        success: function (response) {
-            
-        },
-        complete: function (data) {
-            // Hide image container
-            $('#loading').hide();
-            $('#go').show();
-        }
-    });
-</script>
 
-<div id="reservationsList">
-    @await Html.PartialAsync("ReservationsList", (Model.Reservations) as IEnumerable<Reservation>)
+<div id="view-all">
+    @await Html.PartialAsync("ReservationsList",new ReservationViewModel(Model.Reservations, Model.fromDate, Model.untilDate) { })
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="AddReservationModal" tabindex="-1" role="dialog" aria-labelledby="AddReservationModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="AddReservationModalLabel">Add reservation</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form asp-action="Create">
-                <div class="modal-body">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="row">
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group">
-                                <label asp-for="Reservation.CheckIn" class="control-label"></label>
-                                <input asp-for="Reservation.CheckIn" class="form-control" required />
-                                <span asp-validation-for="Reservation.CheckIn" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group">
-                                <label asp-for="Reservation.CheckOut" class="control-label"></label>
-                                <input asp-for="Reservation.CheckOut" class="form-control" />
-                                <span asp-validation-for="Reservation.CheckOut" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group">
-                                <label asp-for="ObjectForRentId" class="control-label"></label>
-                                <select asp-for="ObjectForRentId" asp-items="Model.ObjectForRents" class="form-control dropdown">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group">
-                                <label asp-for="CustomerId" class="control-label"></label>
-                                <select asp-for="CustomerId" asp-items="Model.Customers" class="form-control dropdown">
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-12 col-sm-4">
-                            <div class="form-group">
-                                <label asp-for="Reservation.People" class="control-label"></label>
-                                <input asp-for="Reservation.People" class="form-control" />
-                                <span asp-validation-for="Reservation.People" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4">
-                            <div class="form-group">
-                                <label asp-for="Reservation.ReservationDeposit" class="control-label"></label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">
-                                            <input type="checkbox" asp-for="Reservation.ReservationDepositPayment" aria-label=" @Html.DisplayNameFor(model => model.Reservation.ReservationDepositPayment)">
-                                        </div>
-                                    </div>
-                                    <input type="text" class="form-control" asp-for="Reservation.ReservationDeposit" aria-label="@Html.DisplayNameFor(model => model.Reservation.ReservationDeposit)">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4">
-                            <div class="form-group">
-                                <label asp-for="Reservation.ReservationPrice" class="control-label"></label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">
-                                            <input type="checkbox" asp-for="Reservation.ReservationPricePayment" aria-label=" @Html.DisplayNameFor(model => model.Reservation.ReservationPricePayment)">
-                                        </div>
-                                    </div>
-                                    <input type="text" class="form-control" asp-for="Reservation.ReservationPrice" aria-label="@Html.DisplayNameFor(model => model.Reservation.ReservationPrice)">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 @section Scripts {
     <script src="~/lib/jquery/dist/jquery.unobtrusive-ajax.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script>
+    //function loadingView() {
+    //    $.ajax({
+    //        beforeSend: function () {
+    //            // Show image container
+    //            $('#loading').show();
+    //            $('#go').hide();
+    //        },
+    //        success: function (response) {
+
+    //        },
+    //        complete: function (data) {
+    //            // Hide image container
+    //            $('#loading').hide();
+    //            $('#go').show();
+    //        }
+    //    });
+    //}
+</script>
+
+
