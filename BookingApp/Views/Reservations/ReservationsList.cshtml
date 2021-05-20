@@ -26,9 +26,10 @@
                         <p class="card-text mb-0">Zadatek: @item.ReservationDeposit </p>
                         <p class="card-text mb-4">Całość: @item.ReservationPrice </p>
                     </a>
-                    <a asp-action="Delete" asp-route-id="@item.Id">
-                        <button class="btn-danger btn-delete">X</button>
-                    </a>
+                    <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                        <input type="hidden" asp-for="@item.Id" />
+                        <input type="submit" value="Delete" class="btn-danger btn-delete" />
+                    </form>
                 </div>
             </div>
         </div>

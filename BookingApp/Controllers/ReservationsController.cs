@@ -67,7 +67,7 @@ namespace BookingApp.Controllers
             DetailsReservationViewModel DetailsReservationViewModel = new DetailsReservationViewModel();
             DetailsReservationViewModel.untilDate = untilDate;
             DetailsReservationViewModel.fromDate = fromDate;
-            DetailsReservationViewModel.Customers = GetSelectListItemCustomers();
+            DetailsReservationViewModel.Customers = _customers;
             DetailsReservationViewModel.ObjectForRents = _objectForRents;
 
             if (id == 0)

@@ -8,6 +8,8 @@ namespace BookingApp.Models
 {
     public class Customer
     {
+        public string CustomerName { get { return FirstName + " " + LastName; } }
+
         public int Id { get; set; }
         [Display(Name = "Imie")]
         public string FirstName { get; set; }

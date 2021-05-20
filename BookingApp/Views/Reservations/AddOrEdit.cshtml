@@ -1,11 +1,10 @@
 ﻿@model BookingApp.ViewModels.DetailsReservationViewModel
 
-@{ 
+@{
     Layout = null;
 
     String tCheckIn;
     String tCheckOut;
-    int objectSelected;
 
     if (Model.Reservation.Id != 0)
     {
@@ -19,13 +18,12 @@
     }
 
     if (Model.Reservation.ObjectForRent != null)
-    {
-        objectSelected = Model.Reservation.ObjectForRent.Id;
-    }
-    else
-    {
-        objectSelected = 0;
-    }
+        Model.ObjectForRentId = Model.Reservation.ObjectForRent.Id;
+
+    if (Model.Reservation.Customer != null)
+        Model.CustomerId = Model.Reservation.Customer.Id;
+
+
 }
 
 <form asp-action="AddOrEdit" asp-route-Id="@Model.Reservation.Id" onsubmit="return jQueryAjaxPost(this);" autocomplete="off">
@@ -36,7 +34,7 @@
     <div class="row">
         <div class="col-12 col-sm-6">
             <div class="form-group">
-                <label asp-for="@Model.Reservation.CheckIn" class="control-label" ></label>
+                <label asp-for="@Model.Reservation.CheckIn" class="control-label"></label>
                 <input asp-for="@Model.Reservation.CheckIn" class="form-control" value="@tCheckIn" required />
                 <span asp-validation-for="@Model.Reservation.CheckIn" class="text-danger"></span>
             </div>
@@ -54,14 +52,16 @@
         <div class="col-12 col-sm-6">
             <div class="form-group">
                 <label asp-for="@Model.ObjectForRentId" class="control-label"></label>
-                @Html.DropDownList("ObjectForRentId", new SelectList(@Model.ObjectForRents, "Id", "Name", objectSelected),null, new { @class = "form-control dropdown" })
+                @Html.DropDownList("ObjectForRentId", new SelectList(@Model.ObjectForRents, "Id", "Name", Model.ObjectForRentId), null, new { @class = "form-control dropdown" })
             </div>
         </div>
         <div class="col-12 col-sm-6">
             <div class="form-group">
                 <label asp-for="@Model.CustomerId" class="control-label"></label>
-                <select asp-for="@Model.CustomerId" asp-items="@Model.Customers" class="form-control dropdown">
-                </select>
+                @Html.DropDownList("CustomerId", new SelectList(@Model.Customers, "Id", "CustomerName", Model.ObjectForRentId), null, new { @class = "form-control dropdown" })
+
+                @*<select asp-for="@Model.CustomerId" asp-items="@Model.Customers" class="form-control dropdown">
+                    </select>*@
             </div>
         </div>
     </div>
