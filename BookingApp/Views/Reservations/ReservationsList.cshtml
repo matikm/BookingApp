@@ -27,8 +27,10 @@
                         <p class="card-text mb-4">Całość: @item.ReservationPrice </p>
                     </a>
                     <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                        <input type="hidden" style="visibility:hidden" asp-for="@Model.untilDate" value="@Model.untilDate.ToString("yyyy-MM-ddT11:00:00.000")" />
+                        <input type="hidden" style="visibility:hidden" asp-for="@Model.fromDate" value="@Model.fromDate.ToString("yyyy-MM-ddT11:00:00.000")" />
                         <input type="hidden" asp-for="@item.Id" />
-                        <input type="submit" value="Delete" class="btn-danger btn-delete" />
+                        <input type="submit" value="X" class="btn-danger btn-delete" />
                     </form>
                 </div>
             </div>

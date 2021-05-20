@@ -22,8 +22,6 @@
 
     if (Model.Reservation.Customer != null)
         Model.CustomerId = Model.Reservation.Customer.Id;
-
-
 }
 
 <form asp-action="AddOrEdit" asp-route-Id="@Model.Reservation.Id" onsubmit="return jQueryAjaxPost(this);" autocomplete="off">
@@ -59,9 +57,6 @@
             <div class="form-group">
                 <label asp-for="@Model.CustomerId" class="control-label"></label>
                 @Html.DropDownList("CustomerId", new SelectList(@Model.Customers, "Id", "CustomerName", Model.ObjectForRentId), null, new { @class = "form-control dropdown" })
-
-                @*<select asp-for="@Model.CustomerId" asp-items="@Model.Customers" class="form-control dropdown">
-                    </select>*@
             </div>
         </div>
     </div>
@@ -83,7 +78,7 @@
                             <input type="checkbox" asp-for="@Model.Reservation.ReservationDepositPayment" aria-label=" @Html.DisplayNameFor(model => model.Reservation.ReservationDepositPayment)">
                         </div>
                     </div>
-                    <input type="text" class="form-control" asp-for="@Model.Reservation.ReservationDeposit" aria-label="@Html.DisplayNameFor(model => model.Reservation.ReservationDeposit)">
+                    <input type="number" class="form-control" asp-for="@Model.Reservation.ReservationDeposit" aria-label="@Html.DisplayNameFor(model => model.Reservation.ReservationDeposit)">
                 </div>
             </div>
         </div>
@@ -96,7 +91,7 @@
                             <input type="checkbox" asp-for="@Model.Reservation.ReservationPricePayment" aria-label=" @Html.DisplayNameFor(model => model.Reservation.ReservationPricePayment)">
                         </div>
                     </div>
-                    <input type="text" class="form-control" asp-for="@Model.Reservation.ReservationPrice" aria-label="@Html.DisplayNameFor(model => model.Reservation.ReservationPrice)">
+                    <input type="number" class="form-control" asp-for="@Model.Reservation.ReservationPrice" aria-label="@Html.DisplayNameFor(model => model.Reservation.ReservationPrice)">
                 </div>
             </div>
         </div>

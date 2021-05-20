@@ -119,7 +119,7 @@ namespace BookingApp.Controllers
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "ReservationsList", new ReservationViewModel(reservations, FT, UT)) });
         }
 
-
+        [NoDirectAccess]
         // GET: Reservations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -134,10 +134,15 @@ namespace BookingApp.Controllers
         // POST: Reservations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, DateTime fromDate, DateTime untilDate)
         {
-            var reservation = await _reservationRepository.DeleteReservation(id);
-            return RedirectToAction(nameof(Index));
+            var isRemoved = await _reservationRepository.DeleteReservation(id);
+
+            var FT = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0);
+            var UT = new DateTime(untilDate.Year, untilDate.Month, untilDate.Day, 23, 59, 59);
+            var reservations = await _reservationRepository.GetReservations(FT, UT);
+
+            return Json(new { html = Helper.RenderRazorViewToString(this, "ReservationsList", new ReservationViewModel(reservations, FT, UT)) });
         }
 
         // POST: Reservations/GetForDate

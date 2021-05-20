@@ -3,15 +3,15 @@
 
 // Write your JavaScript code.
 
-$(function () {
-    $("#loaderbody").addClass('hide');
+//$(function () {
+//    $("#loaderbody").addClass('hide');
 
-    $(document).bind('ajaxStart', function () {
-        $("#loaderbody").removeClass('hide');
-    }).bind('ajaxStop', function () {
-        $("#loaderbody").addClass('hide');
-    });
-});
+//    $(document).bind('ajaxStart', function () {
+//        $("#loaderbody").removeClass('hide');
+//    }).bind('ajaxStop', function () {
+//        $("#loaderbody").addClass('hide');
+//    });
+//});
 
 showInPopup = (url, title) => {
     $.ajax({
@@ -21,7 +21,7 @@ showInPopup = (url, title) => {
             $('#form-modal .modal-body').html(res);
             $('#form-modal .modal-title').html(title);
             $('#form-modal').modal('show');
-            // to make popup draggable
+
             $('.modal-dialog').draggable({
                 handle: ".modal-header"
             });
@@ -43,6 +43,7 @@ jQueryAjaxPost = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
+                    $.notify('submitted successfully', "success");
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -51,7 +52,7 @@ jQueryAjaxPost = form => {
                 console.log(err)
             }
         })
-        //to prevent default form submit event
+       
         return false;
     } catch (ex) {
         console.log(ex)
@@ -59,7 +60,7 @@ jQueryAjaxPost = form => {
 }
 
 jQueryAjaxDelete = form => {
-    if (confirm('Are you sure to delete this record ?')) {
+    if (confirm('Are you sure to delete this reservation ?')) {
         try {
             $.ajax({
                 type: 'POST',
@@ -69,6 +70,8 @@ jQueryAjaxDelete = form => {
                 processData: false,
                 success: function (res) {
                     $('#view-all').html(res.html);
+                    $.notify('deleted successfully', "success");
+
                 },
                 error: function (err) {
                     console.log(err)
@@ -79,6 +82,5 @@ jQueryAjaxDelete = form => {
         }
     }
 
-    //prevent default form submit event
     return false;
 }
