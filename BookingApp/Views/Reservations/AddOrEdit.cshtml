@@ -2,25 +2,39 @@
 
 @{ 
     Layout = null;
+
+    String tCheckIn;
+    String tCheckOut;
+
+    if (Model.Reservation.Id != 0)
+    {
+        tCheckOut = Model.Reservation.CheckOut.ToString("yyyy-MM-ddThh:mm:ss.000");
+        tCheckIn = Model.Reservation.CheckIn.ToString("yyyy-MM-ddThh:mm:ss.000");
+    }
+    else
+    {
+        tCheckOut = DateTime.Now.ToString("yyyy-MM-ddT11:00:00.000");
+        tCheckIn = DateTime.Now.ToString("yyyy-MM-ddT15:00:00.000");
+    }
 }
 
 <form asp-action="AddOrEdit" asp-route-Id="@Model.Reservation.Id" onsubmit="return jQueryAjaxPost(this);" autocomplete="off">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="@Model.Reservation.Id" />
-    <input type="hidden" style="visibility:hidden" asp-for="@Model.untilDate" value="@Model.untilDate.ToString("yyyy-MM-dd")" />
-    <input type="hidden" style="visibility:hidden" asp-for="@Model.fromDate" value="@Model.fromDate.ToString("yyyy-MM-dd")" />
+    <input type="hidden" style="visibility:hidden" asp-for="@Model.untilDate" value="@Model.untilDate.ToString("yyyy-MM-ddT11:00:00.000")" />
+    <input type="hidden" style="visibility:hidden" asp-for="@Model.fromDate" value="@Model.fromDate.ToString("yyyy-MM-ddT11:00:00.000")" />
     <div class="row">
         <div class="col-12 col-sm-6">
             <div class="form-group">
                 <label asp-for="@Model.Reservation.CheckIn" class="control-label" ></label>
-                <input asp-for="@Model.Reservation.CheckIn" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddT11:00:00.000")" required />
+                <input asp-for="@Model.Reservation.CheckIn" class="form-control" value="@tCheckIn" required />
                 <span asp-validation-for="@Model.Reservation.CheckIn" class="text-danger"></span>
             </div>
         </div>
         <div class="col-12 col-sm-6">
             <div class="form-group">
                 <label asp-for="@Model.Reservation.CheckOut" class="control-label"></label>
-                <input asp-for="@Model.Reservation.CheckOut" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddT15:00:00.000")" />
+                <input asp-for="@Model.Reservation.CheckOut" class="form-control" value="@tCheckOut" />
                 <span asp-validation-for="@Model.Reservation.CheckOut" class="text-danger"></span>
             </div>
         </div>

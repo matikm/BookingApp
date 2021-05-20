@@ -1,10 +1,10 @@
-﻿@model IEnumerable<BookingApp.Models.Reservation>
+﻿@model BookingApp.ViewModels.ReservationListViewModel
 @{
     string bg = " ";
     DateTime toDay = DateTime.Now;
 }
 <div class="row">
-    @foreach (var item in Model)
+    @foreach (var item in Model.Reservations)
     {
         @if (@item.CheckOut < toDay) { bg = "bg-secondary"; }
         else
@@ -20,7 +20,7 @@
                     <h5 class="card-text text-center m-0 p-2 ">@item.CheckIn.ToString("dd.MM hh:mm") - @item.CheckOut.ToString("dd.MM hh:mm")</h5>
                 </div>
                 <div class="card-body rounded text-center">
-                    <a onclick="showInPopup('@Url.Action("AddOrEdit","Reservations",new {Id = item.Id },Context.Request.Scheme)','Edit Reservation')">
+                    <a onclick="showInPopup('@Url.Action("AddOrEdit","Reservations",new {Id = item.Id, untilDate = Model.untilDate, fromDate = Model.fromDate },Context.Request.Scheme)','Edit Reservation')">
                         <h2 class="card-title text-uppercase">@item.ObjectForRent.Name</h2>
                         <p class="card-text">@item.Customer.FirstName @item.Customer.LastName</p>
                         <p class="card-text mb-0">Zadatek: @item.ReservationDeposit </p>

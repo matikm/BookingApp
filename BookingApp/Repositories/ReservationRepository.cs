@@ -62,11 +62,12 @@ namespace BookingApp.Repositories
 
         public async Task<bool> UpdateReservation(Reservation reservation)
         {
-            _context.Entry(await _context.Reservation.FirstOrDefaultAsync(c => c.Id == reservation.Id)).CurrentValues.SetValues(reservation);
+            _context.Entry(_context.Reservation.FirstOrDefault(c => c.Id == reservation.Id)).CurrentValues.SetValues(reservation);
 
             if (await _context.SaveChangesAsync() > 0)
                 return true;
             return false;
+
         }
     }
 }
