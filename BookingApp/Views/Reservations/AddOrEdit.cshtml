@@ -1,0 +1,85 @@
+﻿@model BookingApp.ViewModels.DetailsReservationViewModel
+
+@{ 
+    Layout = null;
+}
+
+<form asp-action="AddOrEdit" asp-route-Id="@Model.Reservation.Id" onsubmit="return jQueryAjaxPost(this);" autocomplete="off">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="@Model.Reservation.Id" />
+    <input type="hidden" style="visibility:hidden" asp-for="@Model.untilDate" value="@Model.untilDate.ToString("yyyy-MM-dd")" />
+    <input type="hidden" style="visibility:hidden" asp-for="@Model.fromDate" value="@Model.fromDate.ToString("yyyy-MM-dd")" />
+    <div class="row">
+        <div class="col-12 col-sm-6">
+            <div class="form-group">
+                <label asp-for="@Model.Reservation.CheckIn" class="control-label" ></label>
+                <input asp-for="@Model.Reservation.CheckIn" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddT11:00:00.000")" required />
+                <span asp-validation-for="@Model.Reservation.CheckIn" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6">
+            <div class="form-group">
+                <label asp-for="@Model.Reservation.CheckOut" class="control-label"></label>
+                <input asp-for="@Model.Reservation.CheckOut" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddT15:00:00.000")" />
+                <span asp-validation-for="@Model.Reservation.CheckOut" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-sm-6">
+            <div class="form-group">
+                <label asp-for="@Model.ObjectForRentId" class="control-label"></label>
+                <select asp-for="@Model.ObjectForRentId" asp-items="@Model.ObjectForRents" class="form-control dropdown">
+                </select>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6">
+            <div class="form-group">
+                <label asp-for="@Model.CustomerId" class="control-label"></label>
+                <select asp-for="@Model.CustomerId" asp-items="@Model.Customers" class="form-control dropdown">
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-sm-4">
+            <div class="form-group">
+                <label asp-for="@Model.Reservation.People" class="control-label"></label>
+                <input asp-for="@Model.Reservation.People" class="form-control" />
+                <span asp-validation-for="@Model.Reservation.People" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-12 col-sm-4">
+            <div class="form-group">
+                <label asp-for="@Model.Reservation.ReservationDeposit" class="control-label"></label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" asp-for="@Model.Reservation.ReservationDepositPayment" aria-label=" @Html.DisplayNameFor(model => model.Reservation.ReservationDepositPayment)">
+                        </div>
+                    </div>
+                    <input type="text" class="form-control" asp-for="@Model.Reservation.ReservationDeposit" aria-label="@Html.DisplayNameFor(model => model.Reservation.ReservationDeposit)">
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-4">
+            <div class="form-group">
+                <label asp-for="@Model.Reservation.ReservationPrice" class="control-label"></label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" asp-for="@Model.Reservation.ReservationPricePayment" aria-label=" @Html.DisplayNameFor(model => model.Reservation.ReservationPricePayment)">
+                        </div>
+                    </div>
+                    <input type="text" class="form-control" asp-for="@Model.Reservation.ReservationPrice" aria-label="@Html.DisplayNameFor(model => model.Reservation.ReservationPrice)">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>

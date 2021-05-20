@@ -9,6 +9,7 @@ using BookingApp.Data;
 using BookingApp.Models;
 using BookingApp.ViewModels;
 using BookingApp.Interfaces;
+using static BookingApp.Helper;
 
 namespace BookingApp.Controllers
 {
@@ -111,6 +112,85 @@ namespace BookingApp.Controllers
             return View(reservation);
         }
 
+
+        // GET: Transaction/AddOrEdit(Insert)
+        // GET: Transaction/AddOrEdit/5(Update)
+        [NoDirectAccess]
+        public async Task<IActionResult> AddOrEdit(int id, DateTime fromDate, DateTime untilDate)
+        {
+            DetailsReservationViewModel DetailsReservationViewModel = new DetailsReservationViewModel();
+            DetailsReservationViewModel.untilDate = untilDate;
+            DetailsReservationViewModel.fromDate = fromDate;
+            DetailsReservationViewModel.ObjectForRents = new SelectList(_objectForRents, "Id", "Name");
+            DetailsReservationViewModel.Customers = _customers.Select(a =>
+                                              new SelectListItem
+                                              {
+                                                  Value = a.Id.ToString(),
+                                                  Text = a.FirstName + " " + a.LastName
+                                              });
+
+            if (id == 0)
+            {
+                DetailsReservationViewModel.Reservation = new Reservation();
+                return View(DetailsReservationViewModel);
+            }
+            else
+            {
+                DetailsReservationViewModel.Reservation = await _reservationRepository.GetReservation(id);
+                if (DetailsReservationViewModel.Reservation == null)
+                {
+                    return NotFound();
+                }
+                return View(DetailsReservationViewModel);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddOrEdit(DetailsReservationViewModel detailsReservationViewModel)
+        {
+            detailsReservationViewModel.Reservation.ObjectForRent = _objectForRents.FirstOrDefault(x => x.Id == detailsReservationViewModel.ObjectForRentId);
+            detailsReservationViewModel.Reservation.Customer = _customers.FirstOrDefault(x => x.Id == detailsReservationViewModel.CustomerId);
+            //Insert
+            if (detailsReservationViewModel.Reservation.Id == 0)
+            {
+                await _reservationRepository.AddReservation(detailsReservationViewModel.Reservation);
+            }
+            //Update
+            else
+            {
+                bool value = await _reservationRepository.UpdateReservation(detailsReservationViewModel.Reservation);
+                if (value == false) return NotFound();
+            }
+            var reservations = await _reservationRepository.GetReservations(detailsReservationViewModel.fromDate, detailsReservationViewModel.untilDate);
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "ReservationsList", reservations) });
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // GET: Reservations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -137,6 +217,13 @@ namespace BookingApp.Controllers
         {
             reservationListViewModel.Reservations = await _reservationRepository.GetReservations(fromDate, untilDate);
             return PartialView("ReservationsList", reservationListViewModel.Reservations);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetReservationDetails(int id)
+        {
+            reservationListViewModel.Reservation = await _reservationRepository.GetReservation(id);
+            return PartialView("Details", reservationListViewModel.Reservations);
         }
     }
 }
