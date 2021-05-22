@@ -18,16 +18,18 @@ namespace BookingApp.Controllers
         private readonly IReservationRepository _reservationRepository;
         private readonly IObjectForRentRepository _objectForRentRepositorytory;
         private readonly ICustomerRepository _customerRepository;
+        private readonly IPricePerPeopleRepository _pricePerPeopleRepository;
 
         private ICollection<ObjectForRent> _objectForRents { get; set; }
         private ICollection<Customer> _customers { get; set; }
         public ReservationViewModel reservationViewModel { get; set; }
 
-        public ReservationsController(IReservationRepository reservationRepository, ICustomerRepository customerRepository, IObjectForRentRepository objectForRentRepositorytory, BookingAppContext context)
+        public ReservationsController(IReservationRepository reservationRepository, IPricePerPeopleRepository pricePerPeopleRepository, ICustomerRepository customerRepository, IObjectForRentRepository objectForRentRepositorytory, BookingAppContext context)
         {
             _reservationRepository = reservationRepository;
             _objectForRentRepositorytory = objectForRentRepositorytory;
             _customerRepository = customerRepository;
+            _pricePerPeopleRepository = pricePerPeopleRepository;
             GetObjectAndCustomersAsync();
             reservationViewModel =  new ReservationViewModel();
         }
@@ -67,12 +69,11 @@ namespace BookingApp.Controllers
             DetailsReservationViewModel DetailsReservationViewModel = new DetailsReservationViewModel();
             DetailsReservationViewModel.untilDate = untilDate;
             DetailsReservationViewModel.fromDate = fromDate;
-            DetailsReservationViewModel.Customers = GetSelectListItemCustomers();
+            DetailsReservationViewModel.Customers = _customers;
             DetailsReservationViewModel.ObjectForRents = _objectForRents;
 
             if (id == 0)
             {
-                //DetailsReservationViewModel.ObjectForRents = new SelectList(_objectForRents, "Id", "Name");
                 DetailsReservationViewModel.Reservation = new Reservation();
                 return View(DetailsReservationViewModel);
             }
@@ -83,8 +84,6 @@ namespace BookingApp.Controllers
                 {
                     return NotFound();
                 }
-
-                //DetailsReservationViewModel.ObjectForRents = new SelectList(_objectForRents, "Id", "Name", DetailsReservationViewModel.Reservation.ObjectForRent);
 
                 return View(DetailsReservationViewModel);
             }
@@ -119,7 +118,7 @@ namespace BookingApp.Controllers
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "ReservationsList", new ReservationViewModel(reservations, FT, UT)) });
         }
 
-
+        [NoDirectAccess]
         // GET: Reservations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -134,10 +133,15 @@ namespace BookingApp.Controllers
         // POST: Reservations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, DateTime fromDate, DateTime untilDate)
         {
-            var reservation = await _reservationRepository.DeleteReservation(id);
-            return RedirectToAction(nameof(Index));
+            var isRemoved = await _reservationRepository.DeleteReservation(id);
+
+            var FT = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0);
+            var UT = new DateTime(untilDate.Year, untilDate.Month, untilDate.Day, 23, 59, 59);
+            var reservations = await _reservationRepository.GetReservations(FT, UT);
+
+            return Json(new { html = Helper.RenderRazorViewToString(this, "ReservationsList", new ReservationViewModel(reservations, FT, UT)) });
         }
 
         // POST: Reservations/GetForDate
@@ -147,7 +151,33 @@ namespace BookingApp.Controllers
             reservationViewModel.Reservations = await _reservationRepository.GetReservations(fromDate, untilDate);
             reservationViewModel.untilDate = untilDate;
             reservationViewModel.fromDate = fromDate;
-            return PartialView("ReservationsList", reservationViewModel);
+            return Json(new { html = Helper.RenderRazorViewToString(this, "ReservationsList", reservationViewModel)});
+        }
+
+        // POST: Reservations/GetForDate
+        [HttpPost]
+        public async Task<IActionResult> CalculatePrice(int objectId, int numberPeople, DateTime checkIn, DateTime checkOut)
+        {
+            int ReservationPrice = 0;
+            int ReservationDeposit = 0;
+            var PiceList = await _pricePerPeopleRepository.GetPriceListForObject(objectId);
+
+            if (PiceList.Count() == 0)
+                return Json(new { reservationPrice = 0, reservationDeposit = 0, message = "Brak cennika dla obiektu" }); 
+            else
+            {
+                var PricePerPeople = PiceList.FirstOrDefault(p => p.People == numberPeople);
+                if(PricePerPeople == null)
+                    return Json(new { reservationPrice = 0, reservationDeposit = 0, message = "Brak ceny dla podanej ilości osób" });
+
+                checkIn = new DateTime(checkIn.Year, checkIn.Month, checkIn.Day, 0, 0, 0);
+                checkOut = new DateTime(checkOut.Year, checkOut.Month, checkOut.Day, 0, 0, 0);
+                TimeSpan Days = checkOut - checkIn;
+                ReservationPrice = (int)PricePerPeople.Price * Days.Days;
+                ReservationDeposit = (int)(ReservationPrice * 0.2);
+            }
+
+            return Json(new { reservationPrice = ReservationPrice, reservationDeposit = ReservationDeposit });
         }
 
     }

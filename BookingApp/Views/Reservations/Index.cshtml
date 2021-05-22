@@ -13,12 +13,7 @@
     <h1 class="text-white">Rezerwacje</h1>
 </div>
 
-
-<form asp-action="GetForDate"
-      data-ajax="true"
-      data-ajax-method="POST"
-      data-ajax-mode="replace"
-      data-ajax-update="#view-all">
+<form asp-action="GetForDate" onsubmit="return jQueryAjaxGetForDate(this)">
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -44,7 +39,7 @@
             </div>
         </div>
         <div class="col-6 col-sm-2 my-1">
-            <button type="submit" class="btn btn-primary w-100" onclick="drawChart();">
+            <button type="submit" class="btn btn-primary w-100">
                 <span id="go" class="btn-material material-icons">
                     search
                 </span>
@@ -69,25 +64,3 @@
     <script src="~/lib/jquery/dist/jquery.unobtrusive-ajax.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-
-<script>
-    //function loadingView() {
-    //    $.ajax({
-    //        beforeSend: function () {
-    //            // Show image container
-    //            $('#loading').show();
-    //            $('#go').hide();
-    //        },
-    //        success: function (response) {
-
-    //        },
-    //        complete: function (data) {
-    //            // Hide image container
-    //            $('#loading').hide();
-    //            $('#go').show();
-    //        }
-    //    });
-    //}
-</script>
-
-

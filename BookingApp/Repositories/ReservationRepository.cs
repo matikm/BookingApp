@@ -67,7 +67,6 @@ namespace BookingApp.Repositories
             if (await _context.SaveChangesAsync() > 0)
                 return true;
             return false;
-
         }
     }
 }

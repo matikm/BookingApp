@@ -1,11 +1,10 @@
 ﻿@model BookingApp.ViewModels.DetailsReservationViewModel
 
-@{ 
+@{
     Layout = null;
 
     String tCheckIn;
     String tCheckOut;
-    int objectSelected;
 
     if (Model.Reservation.Id != 0)
     {
@@ -14,18 +13,15 @@
     }
     else
     {
-        tCheckOut = DateTime.Now.ToString("yyyy-MM-ddT11:00:00.000");
+        tCheckOut = DateTime.Now.AddDays(1).ToString("yyyy-MM-ddT11:00:00.000");
         tCheckIn = DateTime.Now.ToString("yyyy-MM-ddT15:00:00.000");
     }
 
     if (Model.Reservation.ObjectForRent != null)
-    {
-        objectSelected = Model.Reservation.ObjectForRent.Id;
-    }
-    else
-    {
-        objectSelected = 0;
-    }
+        Model.ObjectForRentId = Model.Reservation.ObjectForRent.Id;
+
+    if (Model.Reservation.Customer != null)
+        Model.CustomerId = Model.Reservation.Customer.Id;
 }
 
 <form asp-action="AddOrEdit" asp-route-Id="@Model.Reservation.Id" onsubmit="return jQueryAjaxPost(this);" autocomplete="off">
@@ -36,15 +32,15 @@
     <div class="row">
         <div class="col-12 col-sm-6">
             <div class="form-group">
-                <label asp-for="@Model.Reservation.CheckIn" class="control-label" ></label>
-                <input asp-for="@Model.Reservation.CheckIn" class="form-control" value="@tCheckIn" required />
+                <label asp-for="@Model.Reservation.CheckIn" class="control-label"></label>
+                <input asp-for="@Model.Reservation.CheckIn" class="form-control dateChange" value="@tCheckIn" required />
                 <span asp-validation-for="@Model.Reservation.CheckIn" class="text-danger"></span>
             </div>
         </div>
         <div class="col-12 col-sm-6">
             <div class="form-group">
                 <label asp-for="@Model.Reservation.CheckOut" class="control-label"></label>
-                <input asp-for="@Model.Reservation.CheckOut" class="form-control" value="@tCheckOut" />
+                <input min="@tCheckIn" asp-for="@Model.Reservation.CheckOut" class="form-control dateChange" value="@tCheckOut" />
                 <span asp-validation-for="@Model.Reservation.CheckOut" class="text-danger"></span>
             </div>
         </div>
@@ -54,14 +50,13 @@
         <div class="col-12 col-sm-6">
             <div class="form-group">
                 <label asp-for="@Model.ObjectForRentId" class="control-label"></label>
-                @Html.DropDownList("ObjectForRentId", new SelectList(@Model.ObjectForRents, "Id", "Name", objectSelected),null, new { @class = "form-control dropdown" })
+                @Html.DropDownList("ObjectForRentId", new SelectList(@Model.ObjectForRents, "Id", "Name", Model.ObjectForRentId), null, new { @class = "form-control dropdown dateChange" })
             </div>
         </div>
         <div class="col-12 col-sm-6">
             <div class="form-group">
                 <label asp-for="@Model.CustomerId" class="control-label"></label>
-                <select asp-for="@Model.CustomerId" asp-items="@Model.Customers" class="form-control dropdown">
-                </select>
+                @Html.DropDownList("CustomerId", new SelectList(@Model.Customers, "Id", "CustomerName", Model.ObjectForRentId), null, new { @class = "form-control dropdown dateChange" })
             </div>
         </div>
     </div>
@@ -70,7 +65,7 @@
         <div class="col-12 col-sm-4">
             <div class="form-group">
                 <label asp-for="@Model.Reservation.People" class="control-label"></label>
-                <input asp-for="@Model.Reservation.People" class="form-control" />
+                <input min="0" asp-for="@Model.Reservation.People" class="form-control dateChange" />
                 <span asp-validation-for="@Model.Reservation.People" class="text-danger"></span>
             </div>
         </div>
@@ -83,7 +78,7 @@
                             <input type="checkbox" asp-for="@Model.Reservation.ReservationDepositPayment" aria-label=" @Html.DisplayNameFor(model => model.Reservation.ReservationDepositPayment)">
                         </div>
                     </div>
-                    <input type="text" class="form-control" asp-for="@Model.Reservation.ReservationDeposit" aria-label="@Html.DisplayNameFor(model => model.Reservation.ReservationDeposit)">
+                    <input class="form-control" type="number" min="0" asp-for="@Model.Reservation.ReservationDeposit" aria-label="@Html.DisplayNameFor(model => model.Reservation.ReservationDeposit)">
                 </div>
             </div>
         </div>
@@ -96,7 +91,7 @@
                             <input type="checkbox" asp-for="@Model.Reservation.ReservationPricePayment" aria-label=" @Html.DisplayNameFor(model => model.Reservation.ReservationPricePayment)">
                         </div>
                     </div>
-                    <input type="text" class="form-control" asp-for="@Model.Reservation.ReservationPrice" aria-label="@Html.DisplayNameFor(model => model.Reservation.ReservationPrice)">
+                    <input class="form-control" type="number" min="0" asp-for="@Model.Reservation.ReservationPrice" aria-label="@Html.DisplayNameFor(model => model.Reservation.ReservationPrice)">
                 </div>
             </div>
         </div>
@@ -105,3 +100,7 @@
         <input type="submit" value="Submit" class="btn btn-primary w-100" />
     </div>
 </form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
