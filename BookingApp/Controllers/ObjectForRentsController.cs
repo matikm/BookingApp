@@ -33,74 +33,43 @@ namespace BookingApp.Controllers
             return View(ObjectForRentViewModel);
         }
 
-        // GET: ObjectForRents/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {         
-            var objectForRent = await _objectForRentRepositorytory.GetObjectForRent(id);
-
-            if (objectForRent == null)
-                return NotFound();
-
-            return View(objectForRent);
-        }
 
         // POST: ObjectForRents/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ObjectForRentViewModel CreateObjectForRentViewModel)
+        public async Task<IActionResult> AddOrEdit(ObjectForRent objectForRent)
         {
-            if (ModelState.IsValid)
+            string Message;
+            //Insert
+            if (objectForRent.ObjectForRentId == 0)
             {
-                await _objectForRentRepositorytory.AddObjectForRent(CreateObjectForRentViewModel.ObjectForRent);
-                return RedirectToAction(nameof(Index));
+                await _objectForRentRepositorytory.AddObjectForRent(objectForRent);
+                Message = "Dodano obiekt";
             }
-            return View(CreateObjectForRentViewModel.ObjectForRent);
-        }
-
-        // GET: ObjectForRents/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            var objectForRent = await _objectForRentRepositorytory.GetObjectForRent(id);
-
-            if (objectForRent == null)
-                return NotFound();
-
-            return View(objectForRent);
-        }
-
-        // POST: ObjectForRents/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Photo")] ObjectForRent objectForRent)
-        {
-            if (id != objectForRent.Id)
-                return NotFound();
+            //Update
             else
             {
-                if (await _objectForRentRepositorytory.UpdateObjectForRent(objectForRent))
-                    return RedirectToAction(nameof(Index));
-                else
-                    return NotFound();
+                bool value = await _objectForRentRepositorytory.UpdateObjectForRent(objectForRent);
+                if (value == false) return NotFound();
+                Message = "Edycja rezerwacji przebiegła pomyślnie";
             }
+
+            var Objects = await _objectForRentRepositorytory.GetObjectForRents();
+
+            return Json(new {html = Helper.RenderRazorViewToString(this, "ObjectForRentList", Objects), message = Message, style = "success" });
         }
 
-        // GET: ObjectForRents/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            var objectForRent = await _objectForRentRepositorytory.GetObjectForRent(id);
-            if (objectForRent != null)
-                return View(objectForRent);
-            else
-                return NotFound();
-        }
 
         // POST: ObjectForRents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var objectForRent = await _objectForRentRepositorytory.DeleteObjectForRent(id);
-            return RedirectToAction(nameof(Index));
+            var isRemoved = await _objectForRentRepositorytory.DeleteObjectForRent(id);
+
+            var Objects = await _objectForRentRepositorytory.GetObjectForRents();
+
+            return Json(new { html = Helper.RenderRazorViewToString(this, "ObjectForRentList", Objects)});
         }
 
     }

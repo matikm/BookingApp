@@ -32,54 +32,26 @@ namespace BookingApp.Controllers
         // POST: Customers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,Telephone")] Customer customer)
+        public async Task<IActionResult> AddOrEdit(Customer customer)
         {
-            if (ModelState.IsValid)
+            string Message;
+            //Insert
+            if (customer.CustomerId == 0)
             {
                 await _customerRepository.AddCustomer(customer);
-                return RedirectToAction(nameof(Index));
+                Message = "Dodano klienta";
             }
-            return View(customer);
-        }
-
-        // GET: Customers/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            var customer = await _customerRepository.GetCustomer(id);
-
-            if (customer == null)
-                return NotFound();
-            
-            return View(customer);
-        }
-
-        // POST: Customers/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Telephone")] Customer customer)
-        {
-            if (id != customer.Id)
-                return NotFound();
-
-            if (ModelState.IsValid)
-            {
-                if (await _customerRepository.UpdateCustomer(customer)) 
-                    return RedirectToAction(nameof(Index));
-                else return NotFound();
-            }
-            return View(customer);
-        }
-
-        // GET: Customers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            var customer = await _customerRepository.GetCustomer(id);
-
-            if(customer != null) 
-                return View(customer); 
+            //Update
             else
-                return NotFound();
+            {
+                bool value = await _customerRepository.UpdateCustomer(customer);
+                if (value == false) return NotFound();
+                Message = "Edycja klienta przebiegła pomyślnie";
+            }
 
+            var Customers = await _customerRepository.GetCustomers();
+
+            return Json(new {html = Helper.RenderRazorViewToString(this, "CustomerList", Customers), message = Message, style = "success" });
         }
 
         // POST: Customers/Delete/5
@@ -87,8 +59,13 @@ namespace BookingApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var customer = await _customerRepository.DeleteCustomer(id); 
-            return RedirectToAction(nameof(Index));
+            var isRemoved = await _customerRepository.DeleteCustomer(id);
+            var Customers = await _customerRepository.GetCustomers();
+
+            if (isRemoved)
+                return Json(new { html = Helper.RenderRazorViewToString(this, "CustomerList", Customers) });
+            else
+                return Json(new { html = Helper.RenderRazorViewToString(this, "CustomerList", Customers) });
         }
     }
 }

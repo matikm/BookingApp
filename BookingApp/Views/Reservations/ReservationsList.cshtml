@@ -14,22 +14,22 @@
             else { bg = "bg-light"; }
         }
 
-        <div class="col-12 col-md-3 py-2">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 py-2">
             <div class="card">
                 <div class="card-header p-0 @bg rounded">
                     <h5 class="card-text text-center m-0 p-2 ">@item.CheckIn.ToString("dd.MM hh:mm") - @item.CheckOut.ToString("dd.MM hh:mm")</h5>
                 </div>
                 <div class="card-body rounded text-center">
-                    <a onclick="showInPopup('@Url.Action("AddOrEdit","Reservations",new {Id = item.Id, untilDate = Model.untilDate, fromDate = Model.fromDate },Context.Request.Scheme)','Edit Reservation')">
+                    <a onclick="showInPopup('@Url.Action("AddOrEdit","Reservations",new {Id = item.ReservationId, untilDate = Model.untilDate, fromDate = Model.fromDate },Context.Request.Scheme)','Edit Reservation')">
                         <h2 class="card-title text-uppercase">@item.ObjectForRent.Name</h2>
                         <p class="card-text">@item.Customer.FirstName @item.Customer.LastName</p>
                         <p class="card-text mb-0">Zadatek: @item.ReservationDeposit </p>
                         <p class="card-text mb-4">Całość: @item.ReservationPrice </p>
                     </a>
-                    <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                    <form asp-action="Delete" asp-route-id="@item.ReservationId" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
                         <input type="hidden" style="visibility:hidden" asp-for="@Model.untilDate" value="@Model.untilDate.ToString("yyyy-MM-ddT11:00:00.000")" />
                         <input type="hidden" style="visibility:hidden" asp-for="@Model.fromDate" value="@Model.fromDate.ToString("yyyy-MM-ddT11:00:00.000")" />
-                        <input type="hidden" asp-for="@item.Id" />
+                        <input type="hidden" asp-for="@item.ReservationId" />
                         <input type="submit" value="X" class="btn-danger btn-delete" />
                     </form>
                 </div>

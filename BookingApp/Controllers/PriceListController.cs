@@ -1,4 +1,5 @@
 ﻿using BookingApp.Interfaces;
+using BookingApp.Models;
 using BookingApp.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,25 +36,37 @@ namespace BookingApp.Controllers
         // POST: PriceList/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(PriceListViewModel priceListViewModel)
+        public async Task<ActionResult> AddOrEdit(PricePerPeople pricePerPeople)
         {
-            int Id = priceListViewModel.PricePerPeople.ObjectForRent.Id;
-
-            if(Id == null) 
-                return Redirect("~/");
+            string Message;
+            //Insert
+            if (pricePerPeople.PricePerPeopleId == 0)
+            {
+                pricePerPeople.ObjectForRent = await _objectForRentRepositorytory.GetObjectForRent(pricePerPeople.ObjectForRent.ObjectForRentId);
+                await _pricePerPeopleRepository.AddPricePerPeople(pricePerPeople);
+                Message = "Dodano";
+            }
+            //Update
             else
             {
-                priceListViewModel.PricePerPeople.ObjectForRent = await _objectForRentRepositorytory.GetObjectForRent(Id);
-                await _pricePerPeopleRepository.AddPricePerPeople(priceListViewModel.PricePerPeople);
-                return RedirectToAction("index", new { id = Id });
+                bool value = await _pricePerPeopleRepository.UpdatePricePerPeople(pricePerPeople);
+                if (value == false) return NotFound();
+                Message = "Edycja cennika przebiegła pomyślnie";
             }
+
+            var PriceList = await _pricePerPeopleRepository.GetPriceListForObject(pricePerPeople.ObjectForRent.ObjectForRentId);
+
+            return Json(new { html = Helper.RenderRazorViewToString(this, "PriceList", PriceList), message = Message, style = "success" });
         }
 
         // Get: PriceListController/Delete/5
-        public async Task<ActionResult> Delete(int id, int priceId)
+        public async Task<ActionResult> Delete(int priceId, int objectId)
         {
-            var objectForRent = await _pricePerPeopleRepository.DeletePricePerPeople(priceId);
-            return RedirectToAction("index", new { id = id });
+
+            var isRemoved = await _pricePerPeopleRepository.DeletePricePerPeople(priceId);
+
+            var PriceList = await _pricePerPeopleRepository.GetPriceListForObject(objectId);
+            return Json(new { html = Helper.RenderRazorViewToString(this, "PriceList", PriceList)});
         }
     }
 }

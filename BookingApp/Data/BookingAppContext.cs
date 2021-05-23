@@ -20,11 +20,43 @@ namespace BookingApp.Data
         public DbSet<BookingApp.Models.ObjectForRent> ObjectForRent { get; set; }
         public DbSet<BookingApp.Models.PricePerPeople> PricePerPeople { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<ObjectForRent>()
-        //        .WithMany(a => a.)
-        //        .OnDelete(DeleteBehavior.Delete);
-        //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<PricePerPeople>()
+                .HasOne(e => e.ObjectForRent)
+                .WithMany(e => e.PriceList)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder
+                .Entity<ObjectForRent>()
+                .HasMany(b => b.PriceList)
+                .WithOne(p => p.ObjectForRent)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder
+                .Entity<Reservation>()
+                .HasOne(e => e.Customer)
+                .WithMany(e => e.Reservations)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder
+                .Entity<Customer>()
+                .HasMany(b => b.Reservations)
+                .WithOne(p => p.Customer)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder
+                .Entity<Reservation>()
+                .HasOne(e => e.ObjectForRent)
+                .WithMany(e => e.Reservations)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder
+                .Entity<ObjectForRent>()
+                .HasMany(b => b.Reservations)
+                .WithOne(p => p.ObjectForRent)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

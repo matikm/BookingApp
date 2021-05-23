@@ -29,7 +29,7 @@ namespace BookingApp.Repositories
         {
             if (id != null)
             {
-                var objectForRent = await _context.ObjectForRent.FirstOrDefaultAsync(c => c.Id == id);
+                var objectForRent = await _context.ObjectForRent.FirstOrDefaultAsync(c => c.ObjectForRentId == id);
                 _context.ObjectForRent.Remove(objectForRent);
                 if (await _context.SaveChangesAsync() > 0)
                     return true;
@@ -52,7 +52,7 @@ namespace BookingApp.Repositories
 
         public async Task<bool> UpdateObjectForRent(ObjectForRent objectForRent)
         {
-            _context.Entry(_context.ObjectForRent.FirstOrDefault(c => c.Id == objectForRent.Id)).CurrentValues.SetValues(objectForRent);
+            _context.Entry(_context.ObjectForRent.FirstOrDefault(c => c.ObjectForRentId == objectForRent.ObjectForRentId)).CurrentValues.SetValues(objectForRent);
 
             if (await _context.SaveChangesAsync() > 0)
                 return true;

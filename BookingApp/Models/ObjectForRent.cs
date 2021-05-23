@@ -8,7 +8,7 @@ namespace BookingApp.Models
 {
     public class ObjectForRent
     {
-        public int Id { get; set; }
+        public int ObjectForRentId { get; set; }
         [Display(Name = "Nazwa")]
         public string Name { get; set; }
         [Display(Name = "Opis")]
@@ -17,6 +17,8 @@ namespace BookingApp.Models
         public string Photo { get; set; }
         [Display(Name = "Cennik")]
         public virtual ICollection<PricePerPeople> PriceList { get; set; }
+        public virtual ICollection<Reservation> Reservations { get; set; }
+
 
     }
 }

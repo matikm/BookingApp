@@ -45,7 +45,7 @@ namespace BookingApp.Controllers
             return _customers.Select(a =>
                                 new SelectListItem
                                 {
-                                    Value = a.Id.ToString(),
+                                    Value = a.CustomerId.ToString(),
                                     Text = a.FirstName + " " + a.LastName
                                 });
         }
@@ -93,18 +93,22 @@ namespace BookingApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit(DetailsReservationViewModel detailsReservationViewModel)
         {
-            detailsReservationViewModel.Reservation.ObjectForRent = _objectForRents.FirstOrDefault(x => x.Id == detailsReservationViewModel.ObjectForRentId);
-            detailsReservationViewModel.Reservation.Customer = _customers.FirstOrDefault(x => x.Id == detailsReservationViewModel.CustomerId);
-            detailsReservationViewModel.Reservation.ObjectForRent = _objectForRents.FirstOrDefault(o => o.Id == detailsReservationViewModel.ObjectForRentId);
+            detailsReservationViewModel.Reservation.ObjectForRent = _objectForRents.FirstOrDefault(x => x.ObjectForRentId == detailsReservationViewModel.ObjectForRentId);
+            detailsReservationViewModel.Reservation.Customer = _customers.FirstOrDefault(x => x.CustomerId == detailsReservationViewModel.CustomerId);
 
+            string Message;
             //Insert
-            if (detailsReservationViewModel.Reservation.Id == 0)
+            if (detailsReservationViewModel.Reservation.ReservationId == 0)
+            {
                 await _reservationRepository.AddReservation(detailsReservationViewModel.Reservation);
+                Message = "Dodano rezerwację";
+            }
             //Update
             else
             {
                 bool value = await _reservationRepository.UpdateReservation(detailsReservationViewModel.Reservation);
-                if (value == false) return NotFound();
+                if (value == false) return Json(new { message = "Edycja rezerwacji się nie powiódła", style = "error" });
+                Message = "Edycja rezerwacji przebiegła pomyślnie";
             }
 
             var FT = detailsReservationViewModel.fromDate;
@@ -115,19 +119,7 @@ namespace BookingApp.Controllers
 
             var reservations = await _reservationRepository.GetReservations(detailsReservationViewModel.fromDate, detailsReservationViewModel.untilDate);
 
-            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "ReservationsList", new ReservationViewModel(reservations, FT, UT)) });
-        }
-
-        [NoDirectAccess]
-        // GET: Reservations/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            var reservation = await _reservationRepository.GetReservation(id);
-
-            if (reservation != null)
-                return View(reservation);
-            else
-                return NotFound();
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "ReservationsList", new ReservationViewModel(reservations, FT, UT)), message = Message, style = "success" });
         }
 
         // POST: Reservations/Delete/5
@@ -151,7 +143,7 @@ namespace BookingApp.Controllers
             reservationViewModel.Reservations = await _reservationRepository.GetReservations(fromDate, untilDate);
             reservationViewModel.untilDate = untilDate;
             reservationViewModel.fromDate = fromDate;
-            return Json(new { html = Helper.RenderRazorViewToString(this, "ReservationsList", reservationViewModel)});
+            return Json(new { html = Helper.RenderRazorViewToString(this, "ReservationsList", reservationViewModel), message = reservationViewModel.Reservations.Count() });
         }
 
         // POST: Reservations/GetForDate

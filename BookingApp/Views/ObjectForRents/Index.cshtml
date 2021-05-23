@@ -4,17 +4,23 @@
     ViewData["Title"] = "Index";
 }
 
-<h1 class="text-white">Object</h1>
+<div class="jumbotron text-center bg-secondary ">
+    <span class="header-icon material-icons">
+        other_houses
+    </span>
+    <h1 class="text-white">Obiekty</h1>
+</div>
 
-@using (Html.BeginForm("Create", "ObjectForRents", FormMethod.Post, new { role = "form" }))
-{
+
+<form asp-action="AddOrEdit" onsubmit="return jQueryAjaxPost(this);" autocomplete="off">
     @Html.AntiForgeryToken()
 
     <div class="form-group">
         <div class="form-row">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(m => m.ObjectForRent.ObjectForRentId, new { @class = "d-none", })
             <div class="col-12 col-sm-2 p-2">
-                @Html.TextBoxFor(m => m.ObjectForRent.Name, new { placeholder = "Name", @class = "form-control" ,  })
+                @Html.TextBoxFor(m => m.ObjectForRent.Name, new { placeholder = "Name", @class = "form-control", })
                 @Html.ValidationMessageFor(m => m.ObjectForRent.Name, "", new { @class = "text-danger" })
             </div>
             <div class="col-12 col-sm-6 p-2">
@@ -26,48 +32,27 @@
                 @Html.ValidationMessageFor(m => m.ObjectForRent.Photo, "", new { @class = "text-danger" })
             </div>
             <div class="col-12 col-sm-2 p-2">
-                <input type="submit" value="Create" class="btn btn-primary" /> 
+                <button type="submit" id="addSubmit" class="btn btn-primary material-icons w-100">
+                    <span class="material-icons">
+                        add
+                    </span>
+                </button>
+                <button type="submit" class="btn btn-success btn-edit material-icons d-none">
+                    <span class="material-icons">
+                        check
+                    </span>
+                </button>
+                <a id="objectClearBtn" class="btn btn-danger btn-edit material-icons d-none">
+                    <span class="material-icons">
+                        clear
+                    </span>
+                </a>
             </div>
         </div>
     </div>
-}
+</form>   
 
-<table class="table">
-    <thead>
-        <tr class="table-light">
-            <th>
-                @Html.DisplayNameFor(model => model.ObjectForRent.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ObjectForRent.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ObjectForRent.Photo)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-
-        @foreach (var item in Model.ObjectForRents)
-        {
-            <tr class="table-light">
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Photo)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-controller="PriceList" asp-route-id="@item.Id">Cennik</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div id="view-all">
+    @await Html.PartialAsync("ObjectForRentList", Model.ObjectForRents)
+</div>
 

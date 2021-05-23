@@ -38,7 +38,7 @@ namespace BookingApp.Repositories
 
         public async Task<bool> UpdateCustomer(Customer customer)
         {         
-            _context.Entry(_context.Customer.FirstOrDefault(c => c.Id == customer.Id)).CurrentValues.SetValues(customer);
+            _context.Entry(_context.Customer.FirstOrDefault(c => c.CustomerId == customer.CustomerId)).CurrentValues.SetValues(customer);
 
             if (await _context.SaveChangesAsync() > 0)
                 return true;
@@ -49,7 +49,7 @@ namespace BookingApp.Repositories
         {
             if (id != null)
             {
-                var customer = await _context.Customer.FirstOrDefaultAsync(c => c.Id == id);
+                var customer = await _context.Customer.FirstOrDefaultAsync(c => c.CustomerId == id);
                 _context.Customer.Remove(customer);
                 if (await _context.SaveChangesAsync() > 0)
                     return true;
@@ -58,5 +58,6 @@ namespace BookingApp.Repositories
             }
             return false; 
         }
+
     }
 }
