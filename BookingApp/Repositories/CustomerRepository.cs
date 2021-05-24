@@ -19,7 +19,7 @@ namespace BookingApp.Repositories
 
         public async Task<ICollection<Customer>> GetCustomers()
         {
-            return await _context.Customer.ToListAsync();
+            return await _context.Customer.OrderByDescending(x=>x.CustomerId).ToListAsync();
         }
 
         public async Task<bool> AddCustomer(Customer customer)

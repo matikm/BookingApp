@@ -10,6 +10,6 @@ namespace BookingApp.ViewModels
     {
         public ICollection<PricePerPeople> PriceList { get; set; }
         public PricePerPeople PricePerPeople { get; set; }
-        public int Id { get; set; }
+        public int ObjectId { get; set; }
     }
 }

@@ -47,7 +47,7 @@ namespace BookingApp.Repositories
         public async Task<ICollection<PricePerPeople>> GetPriceListForObject(int? id)
         {
             if (id == null) return null;
-            return await _context.PricePerPeople.Where(o => o.ObjectForRent.ObjectForRentId == id).ToListAsync();
+            return await _context.PricePerPeople.Where(o => o.ObjectForRent.ObjectForRentId == id).OrderBy(x=>x.People).ToListAsync();
         }
 
         public async Task<ICollection<PricePerPeople>> GetPricePerPeoples()

@@ -47,7 +47,7 @@ namespace BookingApp.Repositories
 
         public async Task<ICollection<ObjectForRent>> GetObjectForRents()
         {
-            return await _context.ObjectForRent.ToListAsync();
+            return await _context.ObjectForRent.OrderByDescending(x=>x.ObjectForRentId).ToListAsync();
         }
 
         public async Task<bool> UpdateObjectForRent(ObjectForRent objectForRent)

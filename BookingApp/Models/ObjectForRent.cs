@@ -10,6 +10,7 @@ namespace BookingApp.Models
     {
         public int ObjectForRentId { get; set; }
         [Display(Name = "Nazwa")]
+        [Required(ErrorMessage = "Pole wymagane")]
         public string Name { get; set; }
         [Display(Name = "Opis")]
         public string Description { get; set; }

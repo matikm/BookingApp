@@ -73,6 +73,7 @@ jQueryAjaxPost = form => {
                 $.notify(res.message, res.style);
                 clearCustpmerFields();
                 clearObiectFields();
+                clearPriceListFields();
             },
             error: function (err) {
                 $.notify('Nie powiodło się', "error");

@@ -12,9 +12,11 @@ namespace BookingApp.Models
         [Display(Name = "Objekt")]
         public virtual ObjectForRent ObjectForRent { get; set; }
         [Display(Name = "Ilość osób")]
+        [Required(ErrorMessage = "Pole wymagane")]
         public int People { get; set; }
         [Display(Name = "Cena")]
-        public decimal Price { get; set; }
+        [Required(ErrorMessage = "Pole wymagane")]
+        public int Price { get; set; }
 
     }
 }

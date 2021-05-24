@@ -34,7 +34,7 @@
             </td>
             <td>
                 <a class="objectEdit">Edit</a> |
-                <a asp-controller="PriceList" asp-route-id="@item.ObjectForRentId">Cennik</a> |
+                <a asp-controller="PriceList" asp-action="Index" asp-route-id="@item.ObjectForRentId">Cennik</a> |
                 <form asp-action="Delete" asp-route-id="@item.ObjectForRentId" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
                     <input type="hidden" asp-for="@item.ObjectForRentId" />
                     <input type="submit" value="Delete" class="btn btn-danger" />

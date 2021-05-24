@@ -36,8 +36,9 @@ namespace BookingApp.Controllers
         // POST: PriceList/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddOrEdit(PricePerPeople pricePerPeople)
+        public async Task<ActionResult> AddOrEdit(PriceListViewModel priceListViewModel)
         {
+            var pricePerPeople = priceListViewModel.PricePerPeople;
             string Message;
             //Insert
             if (pricePerPeople.PricePerPeopleId == 0)
@@ -54,19 +55,19 @@ namespace BookingApp.Controllers
                 Message = "Edycja cennika przebiegła pomyślnie";
             }
 
-            var PriceList = await _pricePerPeopleRepository.GetPriceListForObject(pricePerPeople.ObjectForRent.ObjectForRentId);
+            priceListViewModel.PriceList = await _pricePerPeopleRepository.GetPriceListForObject(pricePerPeople.ObjectForRent.ObjectForRentId);
 
-            return Json(new { html = Helper.RenderRazorViewToString(this, "PriceList", PriceList), message = Message, style = "success" });
+            return Json(new { html = Helper.RenderRazorViewToString(this, "PriceList", priceListViewModel), message = Message, style = "success" });
         }
 
         // Get: PriceListController/Delete/5
         public async Task<ActionResult> Delete(int priceId, int objectId)
         {
-
             var isRemoved = await _pricePerPeopleRepository.DeletePricePerPeople(priceId);
 
-            var PriceList = await _pricePerPeopleRepository.GetPriceListForObject(objectId);
-            return Json(new { html = Helper.RenderRazorViewToString(this, "PriceList", PriceList)});
+            PriceListViewModel.ObjectId = objectId;
+            PriceListViewModel.PriceList = await _pricePerPeopleRepository.GetPriceListForObject(objectId);
+            return Json(new { html = Helper.RenderRazorViewToString(this, "PriceList", PriceListViewModel) });
         }
     }
 }

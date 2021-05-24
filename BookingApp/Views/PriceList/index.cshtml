@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "index";
+    Model.ObjectId = int.Parse(Context.Request.RouteValues["id"].ToString());
 }
 
 <div class="jumbotron text-center bg-secondary ">
@@ -17,17 +18,18 @@
     <div class="form-group">
         <div class="form-row">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(m => m.ObjectId, new { @class = "d-none", })
             @Html.TextBoxFor(m => m.PricePerPeople.PricePerPeopleId, new { @class = "d-none", })
             <div class="col-12 col-sm-4 p-2">
                 <input type="number" name="PricePerPeople.ObjectForRent.ObjectForRentId" data-val="true" id="PricePerPeople_ObjectForRent_ObjectForRentId" class="d-none" value="@Context.Request.RouteValues["id"]" />
-                @Html.TextBoxFor(m => m.PricePerPeople.People, new { placeholder = "People", @class = "form-control", })
+                @Html.TextBoxFor(m => m.PricePerPeople.People, new { type="number", min="0", placeholder = "People", @class = "form-control", })
                 @Html.ValidationMessageFor(m => m.PricePerPeople.People, "", new { @class = "text-danger" })
             </div>
             <div class="col-12 col-sm-4 p-2">
-                @Html.TextBoxFor(m => m.PricePerPeople.Price, new { placeholder = "Price", @class = "form-control", })
+                @Html.TextBoxFor(m => m.PricePerPeople.Price, new { type = "number", min = "0", placeholder = "Price", @class = "form-control", })
                 @Html.ValidationMessageFor(m => m.PricePerPeople.Price, "", new { @class = "text-danger" })
             </div>
-            <div class="col-12 col-sm-2 p-2">
+            <div class="col-12 col-sm-4 p-2">
                 <button type="submit" id="addSubmit" class="btn btn-primary material-icons w-100">
                     <span class="material-icons">
                         add
@@ -49,5 +51,5 @@
 </form>
 
 <div id="view-all">
-    @await Html.PartialAsync("PriceList", Model.PriceList)
+    @await Html.PartialAsync("PriceList", Model)
 </div>
