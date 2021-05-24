@@ -22,7 +22,7 @@ namespace BookingApp.Controllers
 
         private ICollection<ObjectForRent> _objectForRents { get; set; }
         private ICollection<Customer> _customers { get; set; }
-        public ReservationViewModel reservationViewModel { get; set; }
+        public ReservationViewModel reservationViewModel { get; set; } = new ReservationViewModel();
 
         public ReservationsController(IReservationRepository reservationRepository, IPricePerPeopleRepository pricePerPeopleRepository, ICustomerRepository customerRepository, IObjectForRentRepository objectForRentRepositorytory, BookingAppContext context)
         {
@@ -30,8 +30,7 @@ namespace BookingApp.Controllers
             _objectForRentRepositorytory = objectForRentRepositorytory;
             _customerRepository = customerRepository;
             _pricePerPeopleRepository = pricePerPeopleRepository;
-            GetObjectAndCustomersAsync();
-            reservationViewModel =  new ReservationViewModel();
+            GetObjectAndCustomersAsync(); 
         }
 
         void GetObjectAndCustomersAsync()
@@ -129,11 +128,16 @@ namespace BookingApp.Controllers
         {
             var isRemoved = await _reservationRepository.DeleteReservation(id);
 
-            var FT = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0);
-            var UT = new DateTime(untilDate.Year, untilDate.Month, untilDate.Day, 23, 59, 59);
-            var reservations = await _reservationRepository.GetReservations(FT, UT);
+            if (isRemoved)
+            {
+                var FT = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0);
+                var UT = new DateTime(untilDate.Year, untilDate.Month, untilDate.Day, 23, 59, 59);
+                var reservations = await _reservationRepository.GetReservations(FT, UT);
 
-            return Json(new { html = Helper.RenderRazorViewToString(this, "ReservationsList", new ReservationViewModel(reservations, FT, UT)) });
+                return Json(new { html = Helper.RenderRazorViewToString(this, "ReservationsList", new ReservationViewModel(reservations, FT, UT)) });
+            }
+            else
+                return NotFound();
         }
 
         // POST: Reservations/GetForDate

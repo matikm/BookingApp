@@ -65,9 +65,14 @@ namespace BookingApp.Controllers
         {
             var isRemoved = await _pricePerPeopleRepository.DeletePricePerPeople(priceId);
 
-            PriceListViewModel.ObjectId = objectId;
-            PriceListViewModel.PriceList = await _pricePerPeopleRepository.GetPriceListForObject(objectId);
-            return Json(new { html = Helper.RenderRazorViewToString(this, "PriceList", PriceListViewModel) });
+            if (isRemoved)
+            {
+                PriceListViewModel.ObjectId = objectId;
+                PriceListViewModel.PriceList = await _pricePerPeopleRepository.GetPriceListForObject(objectId);
+                return Json(new { html = Helper.RenderRazorViewToString(this, "PriceList", PriceListViewModel) });
+            }
+            else
+                return NotFound();
         }
     }
 }

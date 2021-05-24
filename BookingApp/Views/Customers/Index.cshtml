@@ -17,40 +17,43 @@
     <div class="form-group">
         <div class="form-row">
             <input asp-for="Customer.CustomerId" class="d-none" placeholder="@Html.DisplayNameFor(n=> n.Customer.CustomerId)" />
-            <div class="col-12 col-sm-2 p-2">
+            <div class="col-12 col-sm-6 col-md-2 p-2">
                 <input asp-for="Customer.FirstName" class="form-control" placeholder="@Html.DisplayNameFor(n=> n.Customer.FirstName)" />
                 <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
             </div>
-            <div class="col-12 col-sm-2 p-2">
+            <div class="col-12 col-sm-6 col-md-2 p-2">
                 <input asp-for="Customer.LastName" class="form-control" placeholder="@Html.DisplayNameFor(n=> n.Customer.LastName)" />
                 <span asp-validation-for="Customer.LastName" class="text-danger"></span>
             </div>
-            <div class="col-12 col-sm-3 p-2">
+            <div class="col-12 col-sm-6 col-md-3 p-2">
                 <input asp-for="Customer.Telephone" class="form-control" placeholder="@Html.DisplayNameFor(n=> n.Customer.Telephone)" />
                 <span asp-validation-for="Customer.Telephone" class="text-danger"></span>
             </div>
-            <div class="col-12 col-sm-3 p-2">
+            <div class="col-12 col-sm-6 col-md-3 p-2">
                 <input asp-for="Customer.Email" class="form-control" placeholder="@Html.DisplayNameFor(n=> n.Customer.Email)" />
                 <span asp-validation-for="Customer.Email" class="text-danger"></span>
             </div>
-            <div class="col-12 col-sm-2 p-2">
+            <div class="col-12 col-sm-12 col-md-2 p-2">
                 <button type="submit" id="addSubmit" class="btn btn-primary material-icons w-100">
                     <span class="material-icons">
                         add
                     </span>
                 </button>
-                <button type="submit" class="btn btn-success btn-edit material-icons d-none">
-                    <span class="material-icons">
-                        check
-                    </span>
-                </button>
-                <a id="customerClearBtn" class="btn btn-danger btn-edit material-icons d-none">
-                    <span class="material-icons">
-                        clear
-                    </span>
-                </a>
+                <div class="btn-group w-100 btn-edit d-none">
+                    <button type="submit" class="btn btn-success btn-block material-icons">
+                        <span class="material-icons">
+                            check
+                        </span>
+                    </button>
+                    <a id="customerClearBtn" class="btn btn-danger btn-block material-icons m-0">
+                        <span class="material-icons">
+                            clear
+                        </span>
+                    </a>
+                </div>
+                
             </div>
-        </div>
+            </div>
     </div>
 </form>
 

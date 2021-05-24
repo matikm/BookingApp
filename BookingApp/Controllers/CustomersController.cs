@@ -60,12 +60,13 @@ namespace BookingApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var isRemoved = await _customerRepository.DeleteCustomer(id);
-            var Customers = await _customerRepository.GetCustomers();
-
-            if (isRemoved)
+            
+            if (isRemoved){
+                var Customers = await _customerRepository.GetCustomers();
                 return Json(new { html = Helper.RenderRazorViewToString(this, "CustomerList", Customers) });
+            }
             else
-                return Json(new { html = Helper.RenderRazorViewToString(this, "CustomerList", Customers) });
+                return NotFound();
         }
     }
 }

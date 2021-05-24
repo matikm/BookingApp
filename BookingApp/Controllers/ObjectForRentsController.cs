@@ -33,7 +33,6 @@ namespace BookingApp.Controllers
             return View(ObjectForRentViewModel);
         }
 
-
         // POST: ObjectForRents/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -59,7 +58,6 @@ namespace BookingApp.Controllers
             return Json(new {html = Helper.RenderRazorViewToString(this, "ObjectForRentList", Objects), message = Message, style = "success" });
         }
 
-
         // POST: ObjectForRents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -67,9 +65,13 @@ namespace BookingApp.Controllers
         {
             var isRemoved = await _objectForRentRepositorytory.DeleteObjectForRent(id);
 
-            var Objects = await _objectForRentRepositorytory.GetObjectForRents();
-
-            return Json(new { html = Helper.RenderRazorViewToString(this, "ObjectForRentList", Objects)});
+            if (isRemoved)
+            {
+                var Objects = await _objectForRentRepositorytory.GetObjectForRents();
+                return Json(new { html = Helper.RenderRazorViewToString(this, "ObjectForRentList", Objects) });
+            }
+            else
+                return NotFound();
         }
 
     }
