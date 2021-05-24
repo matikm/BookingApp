@@ -10,7 +10,7 @@ namespace BookingApp.Models
     {
         public string CustomerName { get { return FirstName + " " + LastName; } }
 
-        public int Id { get; set; }
+        public int CustomerId { get; set; }
         [Display(Name = "Imie")]
         [Required(ErrorMessage = "Pole wymagane")]
         public string FirstName { get; set; }
@@ -21,5 +21,7 @@ namespace BookingApp.Models
         public string Email { get; set; }
         [Display(Name = "Telefon")]
         public string Telephone { get; set; }
+
+        public virtual ICollection<Reservation> Reservations { get; set; }
     }
 }

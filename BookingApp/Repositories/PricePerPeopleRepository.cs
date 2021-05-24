@@ -28,7 +28,7 @@ namespace BookingApp.Repositories
         {
             if (id != null)
             {
-                var pricePerPeople = await _context.PricePerPeople.FirstOrDefaultAsync(c => c.Id == id);
+                var pricePerPeople = await _context.PricePerPeople.FirstOrDefaultAsync(c => c.PricePerPeopleId == id);
                 _context.PricePerPeople.Remove(pricePerPeople);
                 if (await _context.SaveChangesAsync() > 0)
                     return true;
@@ -47,7 +47,7 @@ namespace BookingApp.Repositories
         public async Task<ICollection<PricePerPeople>> GetPriceListForObject(int? id)
         {
             if (id == null) return null;
-            return await _context.PricePerPeople.Where(o => o.ObjectForRent.Id == id).ToListAsync();
+            return await _context.PricePerPeople.Where(o => o.ObjectForRent.ObjectForRentId == id).OrderBy(x=>x.People).ToListAsync();
         }
 
         public async Task<ICollection<PricePerPeople>> GetPricePerPeoples()
@@ -57,7 +57,7 @@ namespace BookingApp.Repositories
 
         public async Task<bool> UpdatePricePerPeople(PricePerPeople pricePerPeople)
         {
-            _context.Entry(await _context.PricePerPeople.FirstOrDefaultAsync(c => c.Id == pricePerPeople.Id)).CurrentValues.SetValues(pricePerPeople);
+            _context.Entry(await _context.PricePerPeople.FirstOrDefaultAsync(c => c.PricePerPeopleId == pricePerPeople.PricePerPeopleId)).CurrentValues.SetValues(pricePerPeople);
 
             if (await _context.SaveChangesAsync() > 0)
                 return true;

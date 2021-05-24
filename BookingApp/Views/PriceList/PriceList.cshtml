@@ -1,0 +1,39 @@
+﻿@model BookingApp.ViewModels.PriceListViewModel
+
+<table class="table">
+    <thead>
+        <tr class="table-light">
+            <th>
+                @Html.DisplayNameFor(model => model.PricePerPeople.People)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PricePerPeople.Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.PriceList)
+        {
+            <tr class="table-light">
+                <td class="pricePerPeopleId d-none">
+                    @Html.DisplayFor(modelItem => item.PricePerPeopleId)
+                </td>
+                <td class="pricePerPeoplePeople">
+                    @Html.DisplayFor(modelItem => item.People)
+                </td>
+                <td class="pricePerPeoplePrice">
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    <a class="pricePerPeopleEdit">Edit</a> |
+                    <form asp-action="Delete" asp-route-id="@item.PricePerPeopleId" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                        <input type="hidden" id="priceId" name="priceId" value="@item.PricePerPeopleId" />
+                        <input type="hidden" id="objectId" name="objectId" value="@Model.ObjectId" />
+                        <input type="submit" value="Delete" class="btn btn-danger" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

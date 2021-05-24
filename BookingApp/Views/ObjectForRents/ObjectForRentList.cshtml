@@ -1,0 +1,46 @@
+﻿@model IEnumerable<BookingApp.Models.ObjectForRent>
+
+<table class="table">
+    <thead>
+        <tr class="table-light">
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Photo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+        <tr class="table-light">
+            <td class="objectForRentId d-none">
+                @Html.DisplayFor(modelItem => item.ObjectForRentId)
+            </td>
+            <td class="objectForRentName">
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td class="objectForRentDescription">
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td class="objectForRentPhoto">
+                @Html.DisplayFor(modelItem => item.Photo)
+            </td>
+            <td>
+                <a class="objectEdit">Edit</a> |
+                <a asp-controller="PriceList" asp-action="Index" asp-route-id="@item.ObjectForRentId">Cennik</a> |
+                <form asp-action="Delete" asp-route-id="@item.ObjectForRentId" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                    <input type="hidden" asp-for="@item.ObjectForRentId" />
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </form>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

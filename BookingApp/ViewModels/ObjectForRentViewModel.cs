@@ -10,6 +10,5 @@ namespace BookingApp.ViewModels
     {
         public ObjectForRent ObjectForRent { get; set; }
         public ICollection<ObjectForRent> ObjectForRents { get; set; }
-        public ICollection<Customer> Customers { get; set; }
     }
 }

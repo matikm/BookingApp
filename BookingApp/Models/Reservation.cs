@@ -8,7 +8,7 @@ namespace BookingApp.Models
 {
     public class Reservation
     {
-        public int Id { get; set; }
+        public int ReservationId { get; set; }
 
         [Display(Name = "Check In")]
         [Required(ErrorMessage = "This Field is required.")]

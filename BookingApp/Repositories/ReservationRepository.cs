@@ -30,7 +30,7 @@ namespace BookingApp.Repositories
         {
             if (id != null)
             {
-                var reservation = await _context.Reservation.FirstOrDefaultAsync(c => c.Id == id);
+                var reservation = await _context.Reservation.FirstOrDefaultAsync(c => c.ReservationId == id);
                 _context.Reservation.Remove(reservation);
                 if (await _context.SaveChangesAsync() > 0)
                     return true;
@@ -62,7 +62,12 @@ namespace BookingApp.Repositories
 
         public async Task<bool> UpdateReservation(Reservation reservation)
         {
-            _context.Entry(_context.Reservation.FirstOrDefault(c => c.Id == reservation.Id)).CurrentValues.SetValues(reservation);
+            var Reservations = await _context.Reservation.FirstOrDefaultAsync(c => c.ReservationId == reservation.ReservationId);
+
+            Reservations.ObjectForRent = reservation.ObjectForRent;
+            Reservations.Customer = reservation.Customer;
+
+            _context.Entry(Reservations).CurrentValues.SetValues(reservation);
 
             if (await _context.SaveChangesAsync() > 0)
                 return true;

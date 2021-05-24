@@ -1,0 +1,50 @@
+﻿@model IEnumerable<BookingApp.Models.Customer>
+
+<table class="table table-hover rounded">
+    <thead>
+        <tr class="table-light">
+            <th>
+                @Html.DisplayNameFor(n => n.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(n => n.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(n => n.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(n => n.Telephone)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr class="table-light">
+            <td class="customerId d-none">
+                @Html.DisplayFor(modelItem => item.CustomerId)
+            </td>
+            <td class="customerFirstName">
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td class="customerLastName">
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td class="customerEmail">
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td class="customerTelephone">
+                @Html.DisplayFor(modelItem => item.Telephone)
+            </td>
+            <td>
+                <a class="customerEdit">Edit</a> |
+                <form asp-action="Delete" asp-route-id="@item.CustomerId" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                    <input type="hidden" asp-for="@item.CustomerId" />
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </form>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
