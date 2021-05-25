@@ -19,6 +19,7 @@ namespace BookingApp.Controllers
         public PriceListController(IPricePerPeopleRepository pricePerPeopleRepository, IObjectForRentRepository objectForRentRepositorytory)
         {
             PriceListViewModel = new PriceListViewModel();
+            PriceListViewModel.PricePerPeople = new PricePerPeople();
             _pricePerPeopleRepository = pricePerPeopleRepository;
             _objectForRentRepositorytory = objectForRentRepositorytory;
         }
@@ -27,6 +28,9 @@ namespace BookingApp.Controllers
         public async Task<ActionResult> Index(int Id)
         {
             PriceListViewModel.PriceList = await _pricePerPeopleRepository.GetPriceListForObject(Id);
+            PriceListViewModel.PricePerPeople.ObjectForRent = await _objectForRentRepositorytory.GetObjectForRent(Id);
+            PriceListViewModel.ObjectId = Id;
+            PriceListViewModel.PricePerPeople.People = 1;
             if (PriceListViewModel.PriceList != null)
                 return View(PriceListViewModel);
             else
@@ -38,26 +42,49 @@ namespace BookingApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddOrEdit(PriceListViewModel priceListViewModel)
         {
+
             var pricePerPeople = priceListViewModel.PricePerPeople;
+
             string Message;
-            //Insert
-            if (pricePerPeople.PricePerPeopleId == 0)
+            
+
+            if (ModelState.IsValid)
             {
-                pricePerPeople.ObjectForRent = await _objectForRentRepositorytory.GetObjectForRent(pricePerPeople.ObjectForRent.ObjectForRentId);
-                await _pricePerPeopleRepository.AddPricePerPeople(pricePerPeople);
-                Message = "Dodano";
+                //Insert
+                if (pricePerPeople.PricePerPeopleId == 0)
+                {
+                    pricePerPeople.ObjectForRent = await _objectForRentRepositorytory.GetObjectForRent(pricePerPeople.ObjectForRent.ObjectForRentId);
+                    priceListViewModel.PriceList = await _pricePerPeopleRepository.GetPriceListForObject(pricePerPeople.ObjectForRent.ObjectForRentId);
+                    var Price = priceListViewModel.PriceList.FirstOrDefault(c => c.People == pricePerPeople.People);
+                    if (Price != null)
+                    {
+                        Price.Price = pricePerPeople.Price;
+                        await _pricePerPeopleRepository.UpdatePricePerPeople(Price);
+                        Message = "Zaktualizowano cenę";
+                    }
+                    else
+                    {
+                        await _pricePerPeopleRepository.AddPricePerPeople(pricePerPeople);
+                        Message = "Dodano";
+                    }
+                }
+                //Update
+                else
+                {
+                    bool value = await _pricePerPeopleRepository.UpdatePricePerPeople(pricePerPeople);
+                    if (value == false) return NotFound();
+                    Message = "Edycja cennika przebiegła pomyślnie";
+                }
+
+                priceListViewModel.PriceList = await _pricePerPeopleRepository.GetPriceListForObject(pricePerPeople.ObjectForRent.ObjectForRentId);
+                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "PriceList", priceListViewModel), message = Message, style = "success" });
             }
-            //Update
             else
             {
-                bool value = await _pricePerPeopleRepository.UpdatePricePerPeople(pricePerPeople);
-                if (value == false) return NotFound();
-                Message = "Edycja cennika przebiegła pomyślnie";
+                priceListViewModel.PriceList = await _pricePerPeopleRepository.GetPriceListForObject(pricePerPeople.ObjectForRent.ObjectForRentId);
+                Message = "Wprowadz poprawne dane";
+                return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "PriceList", priceListViewModel), message = Message, style = "error" });
             }
-
-            priceListViewModel.PriceList = await _pricePerPeopleRepository.GetPriceListForObject(pricePerPeople.ObjectForRent.ObjectForRentId);
-
-            return Json(new { html = Helper.RenderRazorViewToString(this, "PriceList", priceListViewModel), message = Message, style = "success" });
         }
 
         // Get: PriceListController/Delete/5
@@ -65,9 +92,14 @@ namespace BookingApp.Controllers
         {
             var isRemoved = await _pricePerPeopleRepository.DeletePricePerPeople(priceId);
 
-            PriceListViewModel.ObjectId = objectId;
-            PriceListViewModel.PriceList = await _pricePerPeopleRepository.GetPriceListForObject(objectId);
-            return Json(new { html = Helper.RenderRazorViewToString(this, "PriceList", PriceListViewModel) });
+            if (isRemoved)
+            {
+                PriceListViewModel.ObjectId = objectId;
+                PriceListViewModel.PriceList = await _pricePerPeopleRepository.GetPriceListForObject(objectId);
+                return Json(new { html = Helper.RenderRazorViewToString(this, "PriceList", PriceListViewModel) });
+            }
+            else
+                return NotFound();
         }
     }
 }

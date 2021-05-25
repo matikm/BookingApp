@@ -176,3 +176,6 @@ C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\Bo
 C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\Customers\CustomerList.cshtml.g.cs
 C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\ObjectForRents\ObjectForRentList.cshtml.g.cs
 C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\obj\Debug\netcoreapp3.1\Razor\Views\PriceList\PriceList.cshtml.g.cs
+C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\bin\Debug\netcoreapp3.1\Ical.Net.dll
+C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\bin\Debug\netcoreapp3.1\NodaTime.dll
+C:\Users\matik\Desktop\Semestr 6\PdIwtA - Programowanie dla Internetu\Projekt\BookingApp\BookingApp\bin\Debug\netcoreapp3.1\System.Runtime.CompilerServices.Unsafe.dll

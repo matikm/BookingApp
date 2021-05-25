@@ -17,7 +17,7 @@
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 py-2">
             <div class="card">
                 <div class="card-header p-0 @bg rounded">
-                    <h5 class="card-text text-center m-0 p-2 ">@item.CheckIn.ToString("dd.MM hh:mm") - @item.CheckOut.ToString("dd.MM hh:mm")</h5>
+                    <h5 class="card-text text-center m-0 p-2 ">@item.CheckIn.ToString("dd.MM HH:mm") - @item.CheckOut.ToString("dd.MM HH:mm")</h5>
                 </div>
                 <div class="card-body rounded text-center">
                     <a onclick="showInPopup('@Url.Action("AddOrEdit","Reservations",new {Id = item.ReservationId, untilDate = Model.untilDate, fromDate = Model.fromDate },Context.Request.Scheme)','Edit Reservation')">

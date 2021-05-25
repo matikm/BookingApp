@@ -10,6 +10,11 @@ using BookingApp.Models;
 using BookingApp.ViewModels;
 using BookingApp.Interfaces;
 using static BookingApp.Helper;
+using Ical.Net.Serialization;
+using Ical.Net.CalendarComponents;
+using Ical.Net.DataTypes;
+using Ical.Net;
+using System.Text;
 
 namespace BookingApp.Controllers
 {
@@ -22,7 +27,7 @@ namespace BookingApp.Controllers
 
         private ICollection<ObjectForRent> _objectForRents { get; set; }
         private ICollection<Customer> _customers { get; set; }
-        public ReservationViewModel reservationViewModel { get; set; }
+        public ReservationViewModel reservationViewModel { get; set; } = new ReservationViewModel();
 
         public ReservationsController(IReservationRepository reservationRepository, IPricePerPeopleRepository pricePerPeopleRepository, ICustomerRepository customerRepository, IObjectForRentRepository objectForRentRepositorytory, BookingAppContext context)
         {
@@ -30,8 +35,7 @@ namespace BookingApp.Controllers
             _objectForRentRepositorytory = objectForRentRepositorytory;
             _customerRepository = customerRepository;
             _pricePerPeopleRepository = pricePerPeopleRepository;
-            GetObjectAndCustomersAsync();
-            reservationViewModel =  new ReservationViewModel();
+            GetObjectAndCustomersAsync(); 
         }
 
         void GetObjectAndCustomersAsync()
@@ -129,11 +133,16 @@ namespace BookingApp.Controllers
         {
             var isRemoved = await _reservationRepository.DeleteReservation(id);
 
-            var FT = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0);
-            var UT = new DateTime(untilDate.Year, untilDate.Month, untilDate.Day, 23, 59, 59);
-            var reservations = await _reservationRepository.GetReservations(FT, UT);
+            if (isRemoved)
+            {
+                var FT = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0);
+                var UT = new DateTime(untilDate.Year, untilDate.Month, untilDate.Day, 23, 59, 59);
+                var reservations = await _reservationRepository.GetReservations(FT, UT);
 
-            return Json(new { html = Helper.RenderRazorViewToString(this, "ReservationsList", new ReservationViewModel(reservations, FT, UT)) });
+                return Json(new { html = Helper.RenderRazorViewToString(this, "ReservationsList", new ReservationViewModel(reservations, FT, UT)) });
+            }
+            else
+                return NotFound();
         }
 
         // POST: Reservations/GetForDate
@@ -170,6 +179,34 @@ namespace BookingApp.Controllers
             }
 
             return Json(new { reservationPrice = ReservationPrice, reservationDeposit = ReservationDeposit });
+        }
+
+        // GET: Reservations/GetIcal
+        public async Task<IActionResult> GetIcalAsync()
+        {
+            var Reservations = await _reservationRepository.GetReservations(DateTime.Now.AddMonths(-1));
+            var calendar = new Calendar();
+
+            foreach (var item in Reservations)
+            {
+                calendar.Events.Add(
+                    new CalendarEvent
+                    {
+                        Summary = $"Rezerwacja {item.ObjectForRent.Name}",
+                        Start = new CalDateTime(item.CheckIn),
+                        End = new CalDateTime(item.CheckOut),
+                        Description =   $"{item.Customer.FirstName} {item.Customer.LastName}\n" +
+                                        $"Ilość osób: {item.People}\n" +
+                                        $"Zaliczka: {item.ReservationDeposit}\n" +
+                                        $"Całość: {item.ReservationPrice}\n",
+                    }
+                );
+            }
+
+            var serializer = new CalendarSerializer();
+            var icalString = serializer.SerializeToString(calendar);
+
+            return File(Encoding.UTF8.GetBytes(icalString), "text/plain", "Calendar.ics");
         }
 
     }

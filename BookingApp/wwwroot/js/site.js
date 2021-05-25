@@ -229,7 +229,7 @@ $("#customerClearBtn").click(function () {
 
 
 function clearCustpmerFields() {
-    $("#Customer_CustomerId").val('');
+    $("#Customer_CustomerId").val('0');
     $("#Customer_FirstName").val('');
     $("#Customer_LastName").val('');
     $("#Customer_Telephone").val('');
@@ -261,7 +261,7 @@ $("#objectClearBtn").click(function () {
 });
 
 function clearObiectFields() {
-    $("#ObjectForRent_ObjectForRentId").val('');
+    $("#ObjectForRent_ObjectForRentId").val('0');
     $("#ObjectForRent_Name").val('');
     $("#ObjectForRent_Description").val('');
     $("#ObjectForRent_Photo").val('');
@@ -290,7 +290,7 @@ $("#priceListClearBtn").click(function () {
 });
 
 function clearPriceListFields() {
-    $("#PricePerPeople_PricePerPeopleId").val('');
+    $("#PricePerPeople_PricePerPeopleId").val('0');
     $("#PricePerPeople_People").val('');
     $("#PricePerPeople_Price").val('');
 

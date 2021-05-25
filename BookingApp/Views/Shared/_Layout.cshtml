@@ -30,6 +30,9 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="ObjectForRents" asp-action="Index">Obiekty</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Reservations" asp-action="GetIcal">ICal</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -40,8 +43,6 @@
             @RenderBody()
         </main>
     </div>
-
-    
 
     <!-- Modal -->
     <div class="modal" tabindex="-1" role="dialog" id="form-modal">
@@ -59,14 +60,11 @@
         </div>
     </div>
 
-
     @*<div class="loaderbody" id="loaderbody">
-            <div class="spinner-border text-primary" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>*@
-
-
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>*@
 
     <footer class="footer text-muted">
         <div class="container">

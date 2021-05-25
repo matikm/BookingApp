@@ -9,14 +9,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Photo)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-
         @foreach (var item in Model)
         {
         <tr class="table-light">
@@ -29,15 +25,24 @@
             <td class="objectForRentDescription">
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
-            <td class="objectForRentPhoto">
-                @Html.DisplayFor(modelItem => item.Photo)
-            </td>
-            <td>
-                <a class="objectEdit">Edit</a> |
-                <a asp-controller="PriceList" asp-action="Index" asp-route-id="@item.ObjectForRentId">Cennik</a> |
+            <td align="right">
+                <a class="objectEdit btn btn-sm btn-outline-warning border-0">
+                    <span class="material-icons btn-material">
+                        edit
+                    </span>
+                </a> |
+                <a asp-controller="PriceList" asp-action="Index" asp-route-id="@item.ObjectForRentId" class="btn btn-sm btn-outline-primary border-0">
+                    <span class="material-icons btn-material">
+                        attach_money
+                    </span>
+                </a> |
                 <form asp-action="Delete" asp-route-id="@item.ObjectForRentId" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
                     <input type="hidden" asp-for="@item.ObjectForRentId" />
-                    <input type="submit" value="Delete" class="btn btn-danger" />
+                    <button type="submit" class="btn btn-sm btn-outline-danger border-0" value="Delete">
+                        <span class="material-icons btn-material">
+                            delete
+                        </span>
+                    </button>
                 </form>
             </td>
         </tr>

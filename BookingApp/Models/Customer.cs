@@ -17,9 +17,12 @@ namespace BookingApp.Models
         [Display(Name = "Nazwisko")]
         [Required(ErrorMessage = "Pole wymagane")]
         public string LastName { get; set; }
+
+        [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
         [Display(Name = "Telefon")]
+        [Phone]
         public string Telephone { get; set; }
 
         public virtual ICollection<Reservation> Reservations { get; set; }

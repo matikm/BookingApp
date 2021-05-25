@@ -25,6 +25,7 @@ namespace BookingApp.Controllers
         public async Task<IActionResult> Index()
         {
             customerViewModel.Customers = await _customerRepository.GetCustomers();
+            customerViewModel.Customer = new Customer();
             return View(customerViewModel);
         }
 
@@ -35,23 +36,34 @@ namespace BookingApp.Controllers
         public async Task<IActionResult> AddOrEdit(Customer customer)
         {
             string Message;
-            //Insert
-            if (customer.CustomerId == 0)
+            if (ModelState.IsValid)
             {
-                await _customerRepository.AddCustomer(customer);
-                Message = "Dodano klienta";
+                //Insert
+                if (customer.CustomerId == 0)
+                {
+                    await _customerRepository.AddCustomer(customer);
+                    Message = "Dodano klienta";
+                }
+                //Update
+                else
+                {
+                    bool value = await _customerRepository.UpdateCustomer(customer);
+                    if (value == false) return NotFound();
+                    Message = "Edycja klienta przebiegła pomyślnie";
+                }
+
+                var Customers = await _customerRepository.GetCustomers();
+
+                return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "CustomerList", Customers), message = Message, style = "success" });
             }
-            //Update
             else
             {
-                bool value = await _customerRepository.UpdateCustomer(customer);
-                if (value == false) return NotFound();
-                Message = "Edycja klienta przebiegła pomyślnie";
+                var Customers = await _customerRepository.GetCustomers();
+                Message = "Wprowadz poprawne dane";
+                return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "CustomerList", Customers), message = Message, style = "error" });
+
             }
 
-            var Customers = await _customerRepository.GetCustomers();
-
-            return Json(new {html = Helper.RenderRazorViewToString(this, "CustomerList", Customers), message = Message, style = "success" });
         }
 
         // POST: Customers/Delete/5
@@ -60,12 +72,13 @@ namespace BookingApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var isRemoved = await _customerRepository.DeleteCustomer(id);
-            var Customers = await _customerRepository.GetCustomers();
-
-            if (isRemoved)
+            
+            if (isRemoved){
+                var Customers = await _customerRepository.GetCustomers();
                 return Json(new { html = Helper.RenderRazorViewToString(this, "CustomerList", Customers) });
+            }
             else
-                return Json(new { html = Helper.RenderRazorViewToString(this, "CustomerList", Customers) });
+                return NotFound();
         }
     }
 }

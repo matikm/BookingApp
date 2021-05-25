@@ -25,12 +25,20 @@
                 <td class="pricePerPeoplePrice">
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
-                <td>
-                    <a class="pricePerPeopleEdit">Edit</a> |
+                <td align="right">
+                    <a class="pricePerPeopleEdit btn btn-sm btn-outline-warning border-0">
+                        <span class="material-icons btn-material">
+                            edit
+                        </span>
+                    </a> |
                     <form asp-action="Delete" asp-route-id="@item.PricePerPeopleId" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
                         <input type="hidden" id="priceId" name="priceId" value="@item.PricePerPeopleId" />
                         <input type="hidden" id="objectId" name="objectId" value="@Model.ObjectId" />
-                        <input type="submit" value="Delete" class="btn btn-danger" />
+                        <button type="submit" class="btn btn-sm btn-outline-danger border-0" value="Delete">
+                            <span class="material-icons btn-material">
+                                delete
+                            </span>
+                        </button>
                     </form>
                 </td>
             </tr>

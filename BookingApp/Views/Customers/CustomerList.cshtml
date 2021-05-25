@@ -37,11 +37,19 @@
             <td class="customerTelephone">
                 @Html.DisplayFor(modelItem => item.Telephone)
             </td>
-            <td>
-                <a class="customerEdit">Edit</a> |
+            <td align="right">
+                <a class="customerEdit btn btn-sm btn-outline-warning border-0">
+                    <span class="material-icons btn-material">
+                        edit
+                    </span>
+                </a> |
                 <form asp-action="Delete" asp-route-id="@item.CustomerId" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
                     <input type="hidden" asp-for="@item.CustomerId" />
-                    <input type="submit" value="Delete" class="btn btn-danger" />
+                    <button type="submit" class="btn btn-sm btn-outline-danger border-0" value="Delete">
+                        <span class="material-icons btn-material">
+                            delete
+                        </span>
+                    </button>
                 </form>
             </td>
         </tr>

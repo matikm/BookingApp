@@ -11,7 +11,6 @@
     <h1 class="text-white">Obiekty</h1>
 </div>
 
-
 <form asp-action="AddOrEdit" onsubmit="return jQueryAjaxPost(this);" autocomplete="off">
     @Html.AntiForgeryToken()
 
@@ -19,38 +18,38 @@
         <div class="form-row">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.TextBoxFor(m => m.ObjectForRent.ObjectForRentId, new { @class = "d-none", })
-            <div class="col-12 col-sm-2 p-2">
+            <div class="col-12 col-sm-6 col-md-4 p-2">
                 @Html.TextBoxFor(m => m.ObjectForRent.Name, new { placeholder = "Name", @class = "form-control", })
-                @Html.ValidationMessageFor(m => m.ObjectForRent.Name, "", new { @class = "text-danger" })
             </div>
-            <div class="col-12 col-sm-6 p-2">
+            <div class="col-12 col-sm-6 col-md-6 p-2">
                 @Html.TextBoxFor(m => m.ObjectForRent.Description, new { placeholder = "Description", @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.ObjectForRent.Description, "", new { @class = "text-danger" })
             </div>
-            <div class="col-12 col-sm-2 p-2">
-                @Html.TextBoxFor(m => m.ObjectForRent.Photo, new { placeholder = "Photo", @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.ObjectForRent.Photo, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-12 col-sm-2 p-2">
+            <div class="col-12 col-md-2 p-2">
                 <button type="submit" id="addSubmit" class="btn btn-primary material-icons w-100">
                     <span class="material-icons">
                         add
                     </span>
                 </button>
-                <button type="submit" class="btn btn-success btn-edit material-icons d-none">
-                    <span class="material-icons">
-                        check
-                    </span>
-                </button>
-                <a id="objectClearBtn" class="btn btn-danger btn-edit material-icons d-none">
-                    <span class="material-icons">
-                        clear
-                    </span>
-                </a>
+                <div class="btn-group w-100 btn-edit d-none">
+                    <button type="submit" class="btn btn-success material-icons">
+                        <span class="material-icons">
+                            check
+                        </span>
+                    </button>
+                    <a id="objectClearBtn" class="btn btn-danger material-icons">
+                        <span class="material-icons">
+                            clear
+                        </span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-</form>   
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 
 <div id="view-all">
     @await Html.PartialAsync("ObjectForRentList", Model.ObjectForRents)
