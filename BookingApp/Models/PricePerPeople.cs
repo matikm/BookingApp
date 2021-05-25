@@ -13,9 +13,11 @@ namespace BookingApp.Models
         public virtual ObjectForRent ObjectForRent { get; set; }
         [Display(Name = "Ilość osób")]
         [Required(ErrorMessage = "Pole wymagane")]
+        [Range(1, 999)]
         public int People { get; set; }
         [Display(Name = "Cena")]
         [Required(ErrorMessage = "Pole wymagane")]
+        [Range(0, 999999)]
         public int Price { get; set; }
 
     }

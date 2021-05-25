@@ -18,19 +18,13 @@
         <div class="form-row">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.TextBoxFor(m => m.ObjectForRent.ObjectForRentId, new { @class = "d-none", })
-            <div class="col-12 col-sm-6 col-md-2 p-2">
+            <div class="col-12 col-sm-6 col-md-4 p-2">
                 @Html.TextBoxFor(m => m.ObjectForRent.Name, new { placeholder = "Name", @class = "form-control", })
-                @Html.ValidationMessageFor(m => m.ObjectForRent.Name, "", new { @class = "text-danger" })
             </div>
             <div class="col-12 col-sm-6 col-md-6 p-2">
                 @Html.TextBoxFor(m => m.ObjectForRent.Description, new { placeholder = "Description", @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.ObjectForRent.Description, "", new { @class = "text-danger" })
             </div>
-            <div class="col-12 col-sm-6 col-md-2 p-2">
-                @Html.TextBoxFor(m => m.ObjectForRent.Photo, new { type = "file", placeholder = "Photo", @class = "form-control" });
-                @Html.ValidationMessageFor(m => m.ObjectForRent.Photo, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-12 col-sm-6 col-md-2 p-2">
+            <div class="col-12 col-md-2 p-2">
                 <button type="submit" id="addSubmit" class="btn btn-primary material-icons w-100">
                     <span class="material-icons">
                         add
@@ -51,7 +45,11 @@
             </div>
         </div>
     </div>
-</form>   
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 
 <div id="view-all">
     @await Html.PartialAsync("ObjectForRentList", Model.ObjectForRents)

@@ -5,6 +5,18 @@
       "FontAwesome/4.7.0": {
         "type": "package"
       },
+      "Ical.Net/4.2.0": {
+        "type": "package",
+        "dependencies": {
+          "NodaTime": "3.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Ical.Net.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Ical.Net.dll": {}
+        }
+      },
       "jQuery/1.8.0": {
         "type": "package"
       },
@@ -937,6 +949,18 @@
         },
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        }
+      },
+      "NodaTime/3.0.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "4.7.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/NodaTime.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/NodaTime.dll": {}
         }
       },
       "NuGet.Frameworks/4.7.0": {
@@ -2114,7 +2138,7 @@
           }
         }
       },
-      "System.Runtime.CompilerServices.Unsafe/4.5.2": {
+      "System.Runtime.CompilerServices.Unsafe/4.7.1": {
         "type": "package",
         "compile": {
           "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
@@ -2778,6 +2802,21 @@
         "fontawesome.4.7.0.nupkg.sha512",
         "fontawesome.nuspec",
         "tools/install.ps1"
+      ]
+    },
+    "Ical.Net/4.2.0": {
+      "sha512": "Dz6cp/EuESEUKtAeP0lHs8vGFKz9fOpiY3gFZSVb2lTpnmI14NtBgcBsUxuFwtIlucJ8Q0hyi+7Ri5bqoWyr8w==",
+      "type": "package",
+      "path": "ical.net/4.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ical.net.4.2.0.nupkg.sha512",
+        "ical.net.nuspec",
+        "lib/net5.0/Ical.Net.dll",
+        "lib/net5.0/Ical.Net.xml",
+        "lib/netstandard2.0/Ical.Net.dll",
+        "lib/netstandard2.0/Ical.Net.xml"
       ]
     },
     "jQuery/1.8.0": {
@@ -4308,6 +4347,20 @@
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.xml",
         "newtonsoft.json.11.0.2.nupkg.sha512",
         "newtonsoft.json.nuspec"
+      ]
+    },
+    "NodaTime/3.0.0": {
+      "sha512": "ZauY6Ihs+abkPCpgIafCj92sl+cDqFbvwrJj9Ga0dteWIYg+A5FeoteBzgzez/cyBeukl2kbDTt4qtpTbHvqOw==",
+      "type": "package",
+      "path": "nodatime/3.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/NodaTime.dll",
+        "lib/netstandard2.0/NodaTime.pdb",
+        "lib/netstandard2.0/NodaTime.xml",
+        "nodatime.3.0.0.nupkg.sha512",
+        "nodatime.nuspec"
       ]
     },
     "NuGet.Frameworks/4.7.0": {
@@ -7143,26 +7196,31 @@
         "version.txt"
       ]
     },
-    "System.Runtime.CompilerServices.Unsafe/4.5.2": {
-      "sha512": "wprSFgext8cwqymChhrBLu62LMg/1u92bU+VOwyfBimSPVFXtsNqEWC92Pf9ofzJFlk4IHmJA75EDJn1b2goAQ==",
+    "System.Runtime.CompilerServices.Unsafe/4.7.1": {
+      "sha512": "zOHkQmzPCn5zm/BH+cxC1XbUS3P4Yoi3xzW7eRgVpDR2tPGSzyMZ17Ig1iRkfJuY0nhxkQQde8pgePNiA7z7TQ==",
       "type": "package",
-      "path": "system.runtime.compilerservices.unsafe/4.5.2",
+      "path": "system.runtime.compilerservices.unsafe/4.7.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
+        "Icon.png",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/net461/System.Runtime.CompilerServices.Unsafe.xml",
         "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.dll",
         "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.xml",
         "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
         "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml",
         "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
         "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "ref/net461/System.Runtime.CompilerServices.Unsafe.dll",
+        "ref/net461/System.Runtime.CompilerServices.Unsafe.xml",
         "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
         "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml",
         "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
         "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
-        "system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512",
+        "system.runtime.compilerservices.unsafe.4.7.1.nupkg.sha512",
         "system.runtime.compilerservices.unsafe.nuspec",
         "useSharedDesignerContext.txt",
         "version.txt"
@@ -8880,6 +8938,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "FontAwesome >= 4.7.0",
+      "Ical.Net >= 4.2.0",
       "Microsoft.EntityFrameworkCore.SqlServer >= 3.1.15",
       "Microsoft.EntityFrameworkCore.Sqlite >= 3.1.15",
       "Microsoft.EntityFrameworkCore.Tools >= 3.1.15",
@@ -8929,6 +8988,10 @@
           "FontAwesome": {
             "target": "Package",
             "version": "[4.7.0, )"
+          },
+          "Ical.Net": {
+            "target": "Package",
+            "version": "[4.2.0, )"
           },
           "Microsoft.EntityFrameworkCore.SqlServer": {
             "target": "Package",

@@ -10,6 +10,11 @@ using BookingApp.Models;
 using BookingApp.ViewModels;
 using BookingApp.Interfaces;
 using static BookingApp.Helper;
+using Ical.Net.Serialization;
+using Ical.Net.CalendarComponents;
+using Ical.Net.DataTypes;
+using Ical.Net;
+using System.Text;
 
 namespace BookingApp.Controllers
 {
@@ -174,6 +179,34 @@ namespace BookingApp.Controllers
             }
 
             return Json(new { reservationPrice = ReservationPrice, reservationDeposit = ReservationDeposit });
+        }
+
+        // GET: Reservations/GetIcal
+        public async Task<IActionResult> GetIcalAsync()
+        {
+            var Reservations = await _reservationRepository.GetReservations(DateTime.Now.AddMonths(-1));
+            var calendar = new Calendar();
+
+            foreach (var item in Reservations)
+            {
+                calendar.Events.Add(
+                    new CalendarEvent
+                    {
+                        Summary = $"Rezerwacja {item.ObjectForRent.Name}",
+                        Start = new CalDateTime(item.CheckIn),
+                        End = new CalDateTime(item.CheckOut),
+                        Description =   $"{item.Customer.FirstName} {item.Customer.LastName}\n" +
+                                        $"Ilość osób: {item.People}\n" +
+                                        $"Zaliczka: {item.ReservationDeposit}\n" +
+                                        $"Całość: {item.ReservationPrice}\n",
+                    }
+                );
+            }
+
+            var serializer = new CalendarSerializer();
+            var icalString = serializer.SerializeToString(calendar);
+
+            return File(Encoding.UTF8.GetBytes(icalString), "text/plain", "Calendar.ics");
         }
 
     }

@@ -44,6 +44,10 @@
               "target": "Package",
               "version": "[4.7.0, )"
             },
+            "Ical.Net": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[3.1.15, )"

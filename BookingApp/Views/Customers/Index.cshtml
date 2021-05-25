@@ -19,19 +19,15 @@
             <input asp-for="Customer.CustomerId" class="d-none" placeholder="@Html.DisplayNameFor(n=> n.Customer.CustomerId)" />
             <div class="col-12 col-sm-6 col-md-2 p-2">
                 <input asp-for="Customer.FirstName" class="form-control" placeholder="@Html.DisplayNameFor(n=> n.Customer.FirstName)" />
-                <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
             </div>
             <div class="col-12 col-sm-6 col-md-2 p-2">
                 <input asp-for="Customer.LastName" class="form-control" placeholder="@Html.DisplayNameFor(n=> n.Customer.LastName)" />
-                <span asp-validation-for="Customer.LastName" class="text-danger"></span>
-            </div>
-            <div class="col-12 col-sm-6 col-md-3 p-2">
-                <input asp-for="Customer.Telephone" class="form-control" placeholder="@Html.DisplayNameFor(n=> n.Customer.Telephone)" />
-                <span asp-validation-for="Customer.Telephone" class="text-danger"></span>
             </div>
             <div class="col-12 col-sm-6 col-md-3 p-2">
                 <input asp-for="Customer.Email" class="form-control" placeholder="@Html.DisplayNameFor(n=> n.Customer.Email)" />
-                <span asp-validation-for="Customer.Email" class="text-danger"></span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3 p-2">
+                <input asp-for="Customer.Telephone" type="number" class="form-control" placeholder="@Html.DisplayNameFor(n=> n.Customer.Telephone)" />
             </div>
             <div class="col-12 col-sm-12 col-md-2 p-2">
                 <button type="submit" id="addSubmit" class="btn btn-primary material-icons w-100">
@@ -51,12 +47,16 @@
                         </span>
                     </a>
                 </div>
-                
+
             </div>
-            </div>
+        </div>
     </div>
 </form>
 
 <div id="view-all">
     @await Html.PartialAsync("CustomerList", Model.Customers)
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -26,8 +26,9 @@ namespace BookingApp.Controllers
         // GET: ObjectForRents
         public async Task<IActionResult> Index()
         {
-            ObjectForRentViewModel = new ObjectForRentViewModel(){
-                ObjectForRents = await _objectForRentRepositorytory.GetObjectForRents()
+            ObjectForRentViewModel = new ObjectForRentViewModel() {
+                ObjectForRents = await _objectForRentRepositorytory.GetObjectForRents(),
+                ObjectForRent = new ObjectForRent()
             };
 
             return View(ObjectForRentViewModel);
@@ -39,23 +40,33 @@ namespace BookingApp.Controllers
         public async Task<IActionResult> AddOrEdit(ObjectForRent objectForRent)
         {
             string Message;
-            //Insert
-            if (objectForRent.ObjectForRentId == 0)
+            if (ModelState.IsValid)
             {
-                await _objectForRentRepositorytory.AddObjectForRent(objectForRent);
-                Message = "Dodano obiekt";
+                //Insert
+                if (objectForRent.ObjectForRentId == 0)
+                {
+                    await _objectForRentRepositorytory.AddObjectForRent(objectForRent);
+                    Message = "Dodano obiekt";
+                }
+                //Update
+                else
+                {
+                    bool value = await _objectForRentRepositorytory.UpdateObjectForRent(objectForRent);
+                    if (value == false) return NotFound();
+                    Message = "Edycja rezerwacji przebiegła pomyślnie";
+                }
+
+                var Objects = await _objectForRentRepositorytory.GetObjectForRents();
+
+                return Json(new { html = Helper.RenderRazorViewToString(this, "ObjectForRentList", Objects), message = Message, style = "success" });
             }
-            //Update
             else
             {
-                bool value = await _objectForRentRepositorytory.UpdateObjectForRent(objectForRent);
-                if (value == false) return NotFound();
-                Message = "Edycja rezerwacji przebiegła pomyślnie";
+                Message = "Wprowadz poprawne dane";
+                var Objects = await _objectForRentRepositorytory.GetObjectForRents();
+                return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "ObjectForRentList", Objects), message = Message, style = "error" });
+
             }
-
-            var Objects = await _objectForRentRepositorytory.GetObjectForRents();
-
-            return Json(new {html = Helper.RenderRazorViewToString(this, "ObjectForRentList", Objects), message = Message, style = "success" });
         }
 
         // POST: ObjectForRents/Delete/5
